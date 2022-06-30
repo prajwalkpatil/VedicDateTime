@@ -223,5 +223,19 @@ yoga <- function(jd,place){
 }
 
 
-yoga(swe_julday(2022,6,30,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+yoga(swe_julday(2022,6,17,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
 
+
+karana <- function(jd,place){
+  rise = sunrise(jd,place)[1]
+
+  solar_long = sun_longitude(rise)
+  lunar_long = moon_longitude(rise)
+  moon_phase = (lunar_long - solar_long) %% 360
+  today = ceiling(moon_phase / 6)
+  degrees_left = today * 6 - moon_phase
+
+  return (c(as.integer(today)))
+}
+
+karana(swe_julday(2022,6,17,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
