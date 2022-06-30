@@ -82,4 +82,22 @@ sunset <- function(jd,place){
   return (c(setting + (tz)/24,to_dms((setting - jd) * 24 + tz)))
 }
 
-sunset(swe_julday(2022, 6, 30, 13.0,SE$GREG_CAL),c(17.329731,76.834297,+5.5))
+moonrise <- function(jd,place){
+  lat = place[1]
+  lon = place[2]
+  tz = place[3]
+  result <- swe_rise_trans_true_hor(jd - (tz/24.0),SE$MOON,"",SE$FLG_SWIEPH,SE$BIT_DISC_CENTER + SE$CALC_RISE,c(lon,lat,0),0,0,0)
+  rise <- result$tret
+  return (to_dms((rise - jd) * 24 + tz))
+}
+
+moonset <- function(jd,place){
+  lat = place[1]
+  lon = place[2]
+  tz = place[3]
+  result <- swe_rise_trans_true_hor(jd - (tz/24.0),SE$MOON,"",SE$FLG_SWIEPH,SE$BIT_DISC_CENTER + SE$CALC_SET,c(lon,lat,0),0,0,0)
+  setting <- result$tret
+  return (to_dms((setting - jd) * 24 + tz))
+}
+
+  print(moonset(gregorian_to_jd(30,6,2022),c(17.329731,76.834297,+5.5)))
