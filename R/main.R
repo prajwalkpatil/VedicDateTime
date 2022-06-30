@@ -139,10 +139,41 @@ tithi<-function(jd,place){
     degrees_left = leap_tithi * 12 -moon_phase
     approx_end = inverse_lagrange(x,y,degrees_left)
     ends = (rise + approx_end - jd) * 24 + place[3]
-    append(answer,c(as.integer(leap_tithi),to_dms(ends)))
+    answer <- append(answer,c(as.integer(leap_tithi),to_dms(ends)))
   }
   return (answer)
 }
 
 
 tithi(swe_julday(2022,6,17,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+
+nakshatra <- function(jd,place){
+  swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
+  lat = place[1]
+  lon = place[2]
+  tz = place[3]
+  rise = sunrise(jd,place)[1]-(tz/24)
+
+  offsets = c(0.0,0.25,0.5,0.75,1.0)
+  longitudes = c()
+  for(i in 1:length(offsets)){
+    longitudes <- append(longitudes,((moon_longitude(rise + offsets[i]) - swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360))
+  }
+  nak = ceiling(longitudes[1] * 27 / 360)
+  y = unwrap_angles(longitudes)
+  x = offsets
+  approx_end = inverse_lagrange(x,y,nak * 360/27)
+  ends = (rise - jd + approx_end) * 24 + tz
+  answer = c(as.integer(nak),to_dms(ends))
+
+  nak_tmrw = ceiling(longitudes[length(longitudes)-1] * 27 / 360)
+  if(((nak_tmrw - nak) %% 27) > 1){
+    leap_nak = nak + 1
+    approx_end = inverse_lagrange(offsets,longitudes,leap_nak*360/27)
+    ends = (rise - jd + approx_end) * 24 + tz
+    answer <- append(answer,c(as.integer(leap_nak),to_dms(ends)))
+  }
+  return (answer)
+}
+
+nakshatra(swe_julday(2022,6,30,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
