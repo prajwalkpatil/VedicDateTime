@@ -100,4 +100,49 @@ moonset <- function(jd,place){
   return (to_dms((setting - jd) * 24 + tz))
 }
 
-  print(moonset(gregorian_to_jd(30,6,2022),c(17.329731,76.834297,+5.5)))
+lunar_phase <- function(jd){
+  sl = sun_longitude(jd)
+  ll = moon_longitude(jd)
+  moon_phase <- ((ll-sl) %% 360)
+  return (moon_phase)
+}
+
+tithi<-function(jd,place){
+  tz = place[3]
+  rise = sunrise(jd,place)[1] - (tz/24)
+  moon_phase = lunar_phase(rise)
+  today = ceiling(moon_phase/12)
+  degrees_left = today * 12 - moon_phase
+
+
+  offsets = c(0.25,0.5,0.75,1.0)
+  lunar_logitude_diff = c()
+  solar_logitude_diff = c()
+  relative_motion = c()
+  for(i in 1:length(offsets)){
+    lunar_logitude_diff <- append(lunar_logitude_diff,((moon_longitude(rise + offsets[i]) - moon_longitude(rise)) %% 360))
+    solar_logitude_diff <- append(solar_logitude_diff,((sun_longitude(rise + offsets[i]) - sun_longitude(rise)) %% 360))
+    relative_motion <- append(relative_motion,(lunar_logitude_diff[i]- solar_logitude_diff[i]))
+  }
+
+  y = relative_motion
+  x = offsets
+
+  approx_end = inverse_lagrange(x,y,degrees_left)
+  ends = (rise + approx_end - jd) * 24 + tz
+  answer = c(as.integer(today),to_dms(ends))
+
+  moon_phase_tom = lunar_phase(rise + 1)
+  tomorrow =ceiling(moon_phase_tom/12)
+  if(((tomorrow-today) %% 30) > 1){
+    leap_tithi = today + 1
+    degrees_left = leap_tithi * 12 -moon_phase
+    approx_end = inverse_lagrange(x,y,degrees_left)
+    ends = (rise + approx_end - jd) * 24 + place[3]
+    append(answer,c(as.integer(leap_tithi),to_dms(ends)))
+  }
+  return (answer)
+}
+
+
+tithi(swe_julday(2022,6,17,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
