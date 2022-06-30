@@ -287,3 +287,36 @@ masa <- function(jd,place){
 }
 
 masa(swe_julday(2022,6,17,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+
+ahargana <- function(jd){
+  return (jd - 588465.5)
+}
+
+elapsed_year <- function(jd,maasa_num){
+  sidereal_year = 365.25636
+  ahar = ahargana(jd)
+  kali = as.integer((ahar + (4 - maasa_num) * 30) / sidereal_year)
+  saka = kali - 3179
+  vikrama = saka + 135
+  return (c(kali, saka))
+}
+
+samvatsara <- function(jd,maasa_num){
+  kali = elapsed_year(jd,maasa_num)[1]
+  if(kali >= 4009){
+    kali = (kali - 14) %% 60
+  }
+  samvat = (kali + 27 + as.integer((kali * 211 - 108)/18000)) %% 60
+  return (samvat)
+}
+
+ritu <- function(masa_num){
+  return ((masa_num - 1) %/% 2)
+}
+
+day_duration <- function(jd,place){
+  srise = sunrise(jd,place)[1]
+  sset = sunrise(jd,place)[1]
+  diff = (sset - srise) * 24
+  return (c(diff,to_dms(diff)))
+}
