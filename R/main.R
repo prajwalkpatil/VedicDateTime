@@ -177,3 +177,51 @@ nakshatra <- function(jd,place){
 }
 
 nakshatra(swe_julday(2022,6,30,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+
+yoga <- function(jd,place){
+  swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
+  lat = place[1]
+  lon = place[2]
+  tz = place[3]
+  rise = sunrise(jd,place)[1]-(tz/24)
+  lunar_long = (moon_longitude(rise) - swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  solar_long = (sun_longitude(rise) - swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  total = (lunar_long + solar_long) %% 360
+  yog = ceiling(total * 27 / 360)
+  degrees_left = yog * (360 / 27) - total
+
+  offsets = c(0.25,0.5,0.75,1.0)
+  lunar_logitude_diff = c()
+  solar_logitude_diff = c()
+  total_motion = c()
+
+  for(i in 1:length(offsets)){
+    lunar_logitude_diff <- append(lunar_logitude_diff,((moon_longitude(rise + offsets[i]) - moon_longitude(rise)) %% 360))
+    solar_logitude_diff <- append(solar_logitude_diff,((sun_longitude(rise + offsets[i]) - sun_longitude(rise)) %% 360))
+    total_motion <- append(total_motion,(lunar_logitude_diff[i] + solar_logitude_diff[i]))
+  }
+
+  y = total_motion
+  x = offsets
+
+  approx_end = inverse_lagrange(x, y, degrees_left)
+  ends = (rise + approx_end - jd) * 24 + tz
+  answer = c(as.integer(yog),to_dms(ends))
+
+  lunar_long_tmrw = (moon_longitude(rise + 1) - swe_get_ayanamsa_ex_ut(rise + 1,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  solar_long_tmrw = (sun_longitude(rise + 1) - swe_get_ayanamsa_ex_ut(rise + 1,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  total_tmrw = (lunar_long_tmrw + solar_long_tmrw) %% 360
+  tomorrow = ceiling(total_tmrw * 27 / 360)
+  if(((tomorrow - yog) %% 27) > 1){
+    leap_yog = yog + 1
+    degrees_left = leap_yog * (360 / 27) - total
+    approx_end = inverse_lagrange(x, y, degrees_left)
+    ends = (rise + approx_end - jd) * 24 + tz
+    answer <- append(answer,c(as.integer(leap_yog),to_dms(ends)))
+  }
+  return (answer)
+}
+
+
+yoga(swe_julday(2022,6,30,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+
