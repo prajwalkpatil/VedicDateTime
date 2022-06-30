@@ -239,3 +239,51 @@ karana <- function(jd,place){
 }
 
 karana(swe_julday(2022,6,17,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+
+vaara <- function(jd){
+  return (as.integer(ceiling(jd + 1) %% 7))
+}
+
+raasi <- function(jd){
+  swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
+  s = sun_longitude(jd)
+  solar_nirayana = (sun_longitude(jd) - swe_get_ayanamsa_ex_ut(jd,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  return (ceiling(solar_nirayana / 30))
+}
+
+new_moon <- function(jd,tithi_,opt = -1){
+  if(opt == -1){
+    start = jd - tithi_
+  }
+  if(opt == +1){
+    start = jd + (30 - tithi_)
+  }
+  x = c()
+  y = c()
+  for(i in 0:16){
+    x <- append(x,(-2 + i/4))
+  }
+  for(j in 1:length(x)){
+    y <- append(y,lunar_phase(start + x[j]))
+  }
+  y = unwrap_angles(y)
+  y0 = inverse_lagrange(x,y,360)
+  return (start + y0)
+}
+
+masa <- function(jd,place){
+  ti = tithi(jd,place)[1]
+  critical = sunrise(jd,place)[1]
+  last_new_moon = new_moon(critical,ti,-1)
+  next_new_moon = new_moon(critical,ti,+1)
+  this_solar_month = raasi(last_new_moon)
+  next_solar_month = raasi(next_new_moon)
+  is_leap_month = (this_solar_month == next_solar_month)
+  maasa = this_solar_month + 1
+  if(maasa > 12){
+    maasa = maasa %% 12
+  }
+  return (c(as.integer(maasa),is_leap_month))
+}
+
+masa(swe_julday(2022,6,17,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
