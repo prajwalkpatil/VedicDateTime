@@ -298,7 +298,7 @@ elapsed_year <- function(jd,maasa_num){
   kali = as.integer((ahar + (4 - maasa_num) * 30) / sidereal_year)
   saka = kali - 3179
   vikrama = saka + 135
-  return (c(kali, saka))
+  return (c(kali, saka, vikrama))
 }
 
 samvatsara <- function(jd,maasa_num){
