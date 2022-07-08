@@ -337,14 +337,34 @@ get_tithi_name <- function(jd,place){
   tithi_ = tithi(jd,place)
   size = length(tithi_)
   size = size / 4
+  j <- 1
   for(i in 1:size){
-    cat(tithis[tithi_[i]])
+    cat(tithis[tithi_[j]])
     cat(" till ")
-    cat(tithi_[i+1],tithi_[i+2],tithi_[i+3],sep = ":")
+    cat(tithi_[j+1], tithi_[j+2], tithi_[j+3], sep = ":")
     if(size > 1 && i == 1){
       cat(" & ")
     }
+    j <- 5
   }
 }
 
-get_tithi_name(swe_julday(2022,6,17,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+get_tithi_name(swe_julday(2022,7,8,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+
+get_nakshatra_name <- function(jd,place){
+  nakshatra_ = nakshatra(jd,place)
+  size = length(nakshatra_)
+  size = size / 4
+  j <- 1
+  for(i in 1:size){
+    cat(nakshatras[nakshatra_[j]])
+    cat(" till ")
+    cat(nakshatra_[j+1], nakshatra_[j+2], nakshatra_[j+3], sep = ":")
+    if(size > 1 && i == 1){
+      cat(" & ")
+    }
+    j <- 5
+  }
+}
+
+get_nakshatra_name(swe_julday(2022,7,18,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
