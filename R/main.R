@@ -320,3 +320,16 @@ day_duration <- function(jd,place){
   diff = (sset - srise) * 24
   return (c(diff,to_dms(diff)))
 }
+
+get_masa_name <- function(jd,place){
+  masa_ = masa(jd,place)
+  masa_name = ""
+  if(masa_[2] == 1){
+    masa_name = "Adhika "
+  }
+  masa_name <- paste(masa_name,masas[masa_[1]],sep = "")
+  return (masa_name)
+}
+
+get_masa_name(swe_julday(2022,7,29,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+
