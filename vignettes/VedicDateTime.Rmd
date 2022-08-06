@@ -1,0 +1,336 @@
+---
+title: "VedicDateTime"
+author: "Prajwal Patil"
+output:
+  rmdformats::readthedown:
+    self_contained: true
+    thumbnails: true
+    lightbox: true
+    gallery: false
+    highlight: tango
+  pdf_document:
+    toc: true
+    highlight: zenburn
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+```{r, include = FALSE}
+install.packages("swephR",repos = "https://CRAN.R-project.org/package=swephR")
+library(swephR)
+data(SE)
+options(digits = 5)
+```
+
+```{r setup}
+library(VedicDateTime)
+```
+
+# Gregorian to JD
+Convert Gregorian date to Julian day number at 00:00 UTC
+```{r}
+gregorian_to_jd(17,6,2022) #In dd,mm,yyyy
+```
+
+# JD to Gregorian
+Convert Julian day number to Gregorian date
+```{r}
+jd_to_gregorian(2459778)
+```
+
+# Sun's Longitude
+Get Solar longitude for a given Julian day number.
+```{r}
+sun_longitude(2459778)
+```
+
+```{r}
+sun_longitude(gregorian_to_jd(17,6,2022))
+```
+
+# Moon's Longitude
+Get Lunar longitude for a given Julian day number.
+```{r}
+moon_longitude(2459778)
+```
+
+```{r}
+moon_longitude(gregorian_to_jd(17,6,2022))
+```
+
+# Sunrise
+Sunrise for a given date and place.
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+sunrise(jd,place)
+```
+
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+sunrise(jd,place)
+```
+
+# Sunset
+Sunset for a given date and place.
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+sunset(jd,place)
+```
+
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+sunset(jd,place)
+```
+
+
+# Moonrise
+Moonrise for a given date and place.
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+moonrise(jd,place)
+```
+
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+moonrise(jd,place)
+```
+
+
+# Moonset
+Moonset for a given date and place.
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+moonset(jd,place)
+```
+
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+moonset(jd,place)
+```
+
+# Panchang
+## Tithi 
+
+Tithi for given date and place.
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+tithi(jd,place)
+```
+
+```{r}
+tithi(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
+```
+
+### Tithi's name
+Get name(s) of the Tithi for given Julian day number and place.
+
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5)  #Latitude, Longitude and timezone of the location
+get_tithi_name(jd,place)
+```
+
+```{r}
+get_tithi_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
+```
+## Nakshatra 
+
+Nakshatra for given date and place.
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5)  #Latitude, Longitude and timezone of the location
+nakshatra(jd,place)
+```
+
+```{r}
+nakshatra(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
+```
+
+### Nakshatra's name
+Get name(s) of the Nakshatra for given Julian day number and place.
+
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5)  #Latitude, Longitude and timezone of the location
+get_nakshatra_name(jd,place)
+```
+
+```{r}
+get_nakshatra_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
+```
+
+## Yoga
+
+Yoga for given date and place.
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5)  #Latitude, Longitude and timezone of the location
+yoga(jd,place)
+```
+
+```{r}
+yoga(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
+```
+
+### Yoga's name
+Get name(s) of the Yoga for given Julian day number and place.
+
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+get_yoga_name(jd,place)
+```
+
+```{r}
+get_yoga_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
+```
+
+## Karana
+
+Karana for given date and place.
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+karana(jd,place)
+```
+
+```{r}
+karana(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
+```
+
+### Karana's name
+Get name(s) of the Karana for given Julian day number and place.
+
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+get_karana_name(jd,place)
+```
+
+```{r}
+get_karana_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
+```
+
+# Vaara
+Vaara for a given Julian day number
+
+```{r}
+vaara(2459778)
+```
+
+```{r}
+vaara(gregorian_to_jd(6,8,2022))
+```
+
+## Vaara's name
+
+Get name of the Vaara for given Julian day number.
+
+```{r}
+get_vaara_name(2459778)
+```
+
+```{r}
+get_vaara_name(gregorian_to_jd(6,8,2022))
+```
+
+# Masa
+Masa for a given place and time.
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+masa(jd,place)
+```
+
+```{r}
+masa(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
+```
+
+## Masa's name
+Get name of the Masa for given Julian day number and place.
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+get_masa_name(jd,place)
+```
+
+```{r}
+get_masa_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
+```
+
+# Ritu
+Returns the number associated with Ritu from a Masa.
+
+```{r}
+masa_num <- masa(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))[1]
+ritu(masa_num)
+```
+
+## Ritu's name
+Returns Ritu's name from a Masa.
+
+```{r}
+masa_num <- masa(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))[1]
+get_ritu_name(masa_num)
+```
+
+# Samvatsara
+
+Returns number associated with the name of the Shaka Samvatsar for a given Julian day number and maasa number.
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+masa_num <- masa(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))[1] #Number associated with the masa
+samvatsara(jd,masa_num)
+```
+
+## Samvatsara's name
+
+Returns the name of the Shaka Samvatsar for a given Julian day number and maasa number.
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+masa_num <- masa(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))[1] #Number associated with the masa
+get_samvatsara_name(jd,masa_num)
+```
+
+# Raasi
+Raasi(Sun-sign) for a given Julian day number
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+raasi(jd)
+```
+
+## Raasi's name
+Gives name of the Raasi(Sun-sign) for a given Julian day number
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+get_raasi_name(jd)
+```
+
+# Moon-sign
+Moonsign for a given Julian day number
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+moonsign(jd)
+```
+
+## Moonsign's name
+Gives name of the moonsign for a given Julian day number
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+get_moonsign_name(jd)
+```

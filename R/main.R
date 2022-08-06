@@ -3,7 +3,7 @@
 # ---------------------------------------------------------------------------- #
 
 #Use Swiss ephemeris package for the calculations
-install.packages("swephR")
+install.packages("swephR",repos = "https://CRAN.R-project.org/package=swephR")
 library(swephR)
 # Load the SE data set from Swiss Ephemeris
 data(SE)
@@ -122,7 +122,6 @@ unwrap_angles <- function(angles){
 #'
 #' @return Value of xa
 #'
-#' @examples
 inverse_lagrange <- function(x,y,ya){
   if(length(x) != length(y)){
     print("Lengths are not equal!")
@@ -305,7 +304,7 @@ lunar_phase <- function(jd){
 #'
 #' @examples
 #' tithi(2459778,c(15.34, 75.13, +5.5))
-#' tithi(swe_julday(2022,6,17,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+#' tithi(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 tithi<-function(jd,place){
   # Tithi as -> 1 = Shukla paksha prathama, 2 = Shukla paksha dvitiya,...
 
@@ -364,7 +363,7 @@ tithi<-function(jd,place){
 #'
 #' @examples
 #' nakshatra(2459778,c(15.34, 75.13, +5.5))
-#' nakshatra(swe_julday(2022,6,17,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+#' nakshatra(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 nakshatra <- function(jd,place){
   #Nakshatra as -> 1 = Ashwini, 2 = Bharani, ..., 27 = Revati
 
@@ -420,7 +419,7 @@ nakshatra(swe_julday(2022,6,30,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
 #'
 #' @examples
 #' yoga(2459778,c(15.34, 75.13, +5.5))
-#' yoga(swe_julday(2022,6,17,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+#' yoga(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 yoga <- function(jd,place){
   #Yoga as -> 1 = Vishkambha, 2 = Priti, ..., 27 = Vaidhrti
   swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
@@ -494,7 +493,7 @@ yoga(swe_julday(2022,6,17,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
 #'
 #' @examples
 #' karana(2459778,c(15.34, 75.13, +5.5))
-#' karana(swe_julday(2022,7,14,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+#' karana(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 karana <- function(jd,place){
   tithi_ = tithi(jd,place)
   answer <- c((tithi_[1] * 2) - 1,tithi_[1] * 2)
@@ -684,6 +683,22 @@ samvatsara <- function(jd,maasa_num){
 }
 # ---------------------------------------------------------------------------- #
 
+# ---------------------------------------------------------------------------- #
+#' get_samvatsara_name
+#'
+#' @description Name of the Shaka Samvatsar for a given Julian day number and maasa number.
+#' @param jd Julian day number
+#' @param maasa_num Maasa number
+#'
+#' @return Shaka Samvatsar
+#'
+#' @examples
+#' get_samvatsara_name(2459778,2)
+get_samvatsara_name <- function(jd,maasa_num){
+  return (samvatsars[samvatsara(jd,maasa_num)])
+}
+# ---------------------------------------------------------------------------- #
+
 
 # ---------------------------------------------------------------------------- #
 #' ritu
@@ -696,6 +711,20 @@ samvatsara <- function(jd,maasa_num){
 #' ritu(2)
 ritu <- function(masa_num){
   return (((masa_num - 1) %/% 2) + 1)
+}
+# ---------------------------------------------------------------------------- #
+
+# ---------------------------------------------------------------------------- #
+#' get_ritu_name
+#'
+#' @param masa_num Number associated with a Masa
+#'
+#' @return Ritu's name
+#'
+#' @examples
+#' ritu(2)
+get_ritu_name <- function(masa_num){
+  return (ritus[ritu(masa_num)])
 }
 # ---------------------------------------------------------------------------- #
 
@@ -723,7 +752,7 @@ day_duration <- function(jd,place){
 
 # ---------------------------------------------------------------------------- #
 #' get_masa_name
-#' @description Get name of the Masa for given Julian day number and place.s
+#' @description Get name of the Masa for given Julian day number and place.
 #'
 #' @param jd Julian day number
 #' @param place Vector containing latitude, longitude and timezone
@@ -808,7 +837,7 @@ get_nakshatra_name <- function(jd,place){
 # ---------------------------------------------------------------------------- #
 
 # ---------------------------------------------------------------------------- #
-#' get_tithi_name
+#' get_karana_name
 #' @description Get name(s) of the Karana for given Julian day number and place.
 #'
 #' @param jd Julian day number
