@@ -196,7 +196,7 @@ sunrise <- function(jd,place){
   tz = place[3]
   result <- swe_rise_trans_true_hor(jd - (tz/24.0),SE$SUN,"",SE$FLG_SWIEPH,SE$BIT_DISC_CENTER + SE$CALC_RISE,c(lon,lat,0),0,0,0)
   rise <- result$tret
-  return (c(rise + (tz)/24,to_dms((rise - jd) * 24 + tz)))
+  return (c(rise + (tz)/24.0,to_dms((rise - jd) * 24 + tz)))
 }
 # ---------------------------------------------------------------------------- #
 
@@ -320,13 +320,13 @@ tithi<-function(jd,place){
 
   # 3. Compute longitudinal differences at intervals of 0.25 days from sunrise
   offsets = c(0.25,0.5,0.75,1.0)
-  lunar_logitude_diff = c()
-  solar_logitude_diff = c()
+  lunar_longitude_diff = c()
+  solar_longitude_diff = c()
   relative_motion = c()
   for(i in 1:length(offsets)){
-    lunar_logitude_diff <- append(lunar_logitude_diff,((moon_longitude(rise + offsets[i]) - moon_longitude(rise)) %% 360))
-    solar_logitude_diff <- append(solar_logitude_diff,((sun_longitude(rise + offsets[i]) - sun_longitude(rise)) %% 360))
-    relative_motion <- append(relative_motion,(lunar_logitude_diff[i]- solar_logitude_diff[i]))
+    lunar_longitude_diff <- append(lunar_longitude_diff,((moon_longitude(rise + offsets[i]) - moon_longitude(rise)) %% 360));
+    solar_longitude_diff <- append(solar_longitude_diff,((sun_longitude(rise + offsets[i]) - sun_longitude(rise)) %% 360));
+    relative_motion <- append(relative_motion,(lunar_longitude_diff[i]- solar_longitude_diff[i]))
   }
   # 4. Find end time by 4-point inverse Lagrange interpolation
   y = relative_motion
@@ -338,13 +338,13 @@ tithi<-function(jd,place){
 
   # 5. Check for skipped tithi
   moon_phase_tom = lunar_phase(rise + 1)
-  tomorrow =ceiling(moon_phase_tom/12)
+  tomorrow = ceiling(moon_phase_tom/12)
   if(((tomorrow-today) %% 30) > 1){
     # interpolate again with same (x,y)
     leap_tithi = today + 1
-    degrees_left = leap_tithi * 12 -moon_phase
+    degrees_left = leap_tithi * 12 - moon_phase
     approx_end = inverse_lagrange(x,y,degrees_left)
-    ends = (rise + approx_end - jd) * 24 + place[3]
+    ends = (rise + approx_end - jd) * 24 + tz
     answer <- append(answer,c(as.integer(leap_tithi),to_dms(ends)))
   }
   return (answer)
@@ -420,7 +420,7 @@ nakshatra(swe_julday(2022,6,30,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
 #' @examples
 #' yoga(2459778,c(15.34, 75.13, +5.5))
 #' yoga(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
-yoga <- function(jd,place){
+  yoga <- function(jd,place){
   #Yoga as -> 1 = Vishkambha, 2 = Priti, ..., 27 = Vaidhrti
   swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
 
@@ -443,14 +443,14 @@ yoga <- function(jd,place){
 
   # 4. Compute longitudinal sums at intervals of 0.25 days from sunrise
   offsets = c(0.25,0.5,0.75,1.0)
-  lunar_logitude_diff = c()
-  solar_logitude_diff = c()
+  lunar_longitude_diff = c()
+  solar_longitude_diff = c()
   total_motion = c()
 
   for(i in 1:length(offsets)){
-    lunar_logitude_diff <- append(lunar_logitude_diff,((moon_longitude(rise + offsets[i]) - moon_longitude(rise)) %% 360))
-    solar_logitude_diff <- append(solar_logitude_diff,((sun_longitude(rise + offsets[i]) - sun_longitude(rise)) %% 360))
-    total_motion <- append(total_motion,(lunar_logitude_diff[i] + solar_logitude_diff[i]))
+    lunar_longitude_diff <- append(lunar_longitude_diff,((moon_longitude(rise + offsets[i]) - moon_longitude(rise)) %% 360))
+    solar_longitude_diff <- append(solar_longitude_diff,((sun_longitude(rise + offsets[i]) - sun_longitude(rise)) %% 360))
+    total_motion <- append(total_motion,(lunar_longitude_diff[i] + solar_longitude_diff[i]))
   }
   # 5. Find end time by 4-point inverse Lagrange interpolation
   y = total_motion
@@ -960,4 +960,3 @@ samvatsars[samvatsara(jul21,masa(jul21,gulbarga))]
 # Can be verified from ->
 # https://www.drikpanchang.com/panchang/month-panchang.html?geoname-id=1270752&date=21/07/2022
 # ---------------------------------------------------------------------------- #
-
