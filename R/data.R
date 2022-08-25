@@ -64,7 +64,7 @@ nakshatras <- c(
   "Purvaphalguni",
   "Uttaraphalguni",
   "Hasta",
-  "Chitta",
+  "Chitra",
   "Swati",
   "Vishakha",
   "Anuradha",
@@ -251,8 +251,8 @@ karanas <- c(
   "Vanija",
   "Visti",
   "Sakuni",
-  "Catuspada",
-  "Nagava"
+  "Chatushpada",
+  "Naga"
 )
 
 raasis <- c(
@@ -268,4 +268,14 @@ raasis <- c(
   "Makara",
   "Kumbha",
   "Meena"
+)
+
+vaaras <- c(
+  "Ravivar",
+  "Somvar",
+  "Mangalwar",
+  "Budhwar",
+  "Guruwar",
+  "Shukrawar",
+  "Shaniwar"
 )
