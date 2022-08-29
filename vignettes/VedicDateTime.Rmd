@@ -151,6 +151,14 @@ get_tithi_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 
 \textbf{Vaara} is the day of the week very similar to the Gregorian calendar.
 
+### Calculation of Vaara
+
+```{r}
+vaara <- function(jd){
+  return (as.integer(ceiling(jd + 1) %% 7) + 1)
+}
+```
+
 Vaara for a given Julian day number
 
 ```{r}
@@ -194,6 +202,51 @@ get_vaara_name(gregorian_to_jd(6,8,2022))
 
 The zodiac is divided into \textbf{27 Nakshatras}. The absolute longitude of the Moon is used to calculate the Nakshatra of the day. This requires \textbf{Ayanamsa} to be subtracted from the moon's tropical (\textit{Sayana}) longitude to get its sidereal (\textit{Nirayana}) longitude which can be used to find out the nakshatra.
 
+### Calculation of Nakshatra
+
+```{r}
+nakshatra <- function(jd,place){
+  #Nakshatra as -> 1 = Ashwini, 2 = Bharani, ..., 27 = Revati
+
+  #Set Lahiri ayanamsa
+  swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
+
+  # 1. Find time of sunrise
+  lat = place[1]
+  lon = place[2]
+  tz = place[3]
+  rise = sunrise(jd,place)[1]-(tz/24)
+
+  # Swiss Ephemeris always gives Sayana. So subtract ayanamsa to get Nirayana
+  offsets = c(0.0,0.25,0.5,0.75,1.0)
+  longitudes = c()
+  for(i in 1:length(offsets)){
+    longitudes <- append(longitudes,((moon_longitude(rise + offsets[i]) - swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360))
+  }
+  # 2. Today's nakshatra is when offset = 0
+  # There are 27 Nakshatras spanning 360 degrees
+  nak = ceiling(longitudes[1] * 27 / 360)
+
+  # 3. Find end time by 5-point inverse Lagrange interpolation
+  y = unwrap_angles(longitudes)
+  x = offsets
+  approx_end = inverse_lagrange(x,y,nak * 360/27)
+  ends = (rise - jd + approx_end) * 24 + tz
+  answer = c(as.integer(nak),to_dms(ends))
+
+  # 4. Check for skipped nakshatra
+  nak_tmrw = ceiling(longitudes[length(longitudes)-1] * 27 / 360)
+  if(((nak_tmrw - nak) %% 27) > 1){
+    leap_nak = nak + 1
+    approx_end = inverse_lagrange(offsets,longitudes,leap_nak*360/27)
+    ends = (rise - jd + approx_end) * 24 + tz
+    answer <- append(answer,c(as.integer(leap_nak),to_dms(ends)))
+  }
+  return (answer)
+}
+
+```
+
 The \textbf{Ayanamsa} which is obtained from the \textit{Swiss Ephemeris} and is set to \textit{Lahiri Ayanamsa}. \textbf{Date} as Julian's day number and the \textbf{place} as latitude, longitude, and time zone are passed as arguments of the function. The \textbf{sunrise} for the given date and place is found using the sunrise function which uses the \textit{Swiss Ephemeris} to get the sunrise as a Julian day number. The \textit{Nirayana longitude} of the \textbf{Moon} is obtained by subtracting the \textit{Ayanamsa} from its \textit{Sayana longitude}. The \textit{Nirayana longitude} of moon is multiplied by 27 and then divided by 360 to get Nakshatra as a decimal number. The ending time of this Nakshatra is obtained by checking for the starting time of the next Nakshatra using \textit{Lagrange’s inverse interpolation} of Nirayana lunar longitudes at 0.25 intervals of day. Nakshatra and its ending time are added to the output vector. Sometimes two Nakshatras can occur on a given date so, we check for skipped Nakshatra by checking the Nakshatra of the next day and if a Nakshatra is skipped then, the skipped Nakshatra is included in the output with its ending time.
 
 Nakshatra for given date and place.
@@ -229,13 +282,71 @@ get_nakshatra_name(jd,place)
 ```{r}
 get_nakshatra_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 ```
-\break
 
 ## Yoga
 
 
 There are \textbf{27 Yogas}, each measure 13°20' of the arc. Yoga is the sum of sidereal (\textit{Nirayana}) longitudes of sun and moon in the multiples of 13° 20'. When the sidereal longitudes of sun and moon are added and they are divided by 13°20', the quotient plus one gives the number which denotes the respective Yoga.
 
+### Calculation of Yoga
+
+```{r}
+yoga <- function(jd,place){
+  #Yoga as -> 1 = Vishkambha, 2 = Priti, ..., 27 = Vaidhrti
+  swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
+
+  # 1. Find time of sunrise
+  lat = place[1]
+  lon = place[2]
+  tz = place[3]
+  rise = sunrise(jd,place)[1]-(tz/24)
+
+  # 2. Find the Nirayana longitudes and add them
+  lunar_long = (moon_longitude(rise) - swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  solar_long = (sun_longitude(rise) - swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  total = (lunar_long + solar_long) %% 360
+
+  # There are 27 Yogas spanning 360 degrees
+  yog = ceiling(total * 27 / 360)
+
+  # 3. Find how many longitudes is there left to be swept
+  degrees_left = yog * (360 / 27) - total
+
+  # 4. Compute longitudinal sums at intervals of 0.25 days from sunrise
+  offsets = c(0.25,0.5,0.75,1.0)
+  lunar_longitude_diff = c()
+  solar_longitude_diff = c()
+  total_motion = c()
+
+  for(i in 1:length(offsets)){
+    lunar_longitude_diff <- append(lunar_longitude_diff,((moon_longitude(rise + offsets[i]) - moon_longitude(rise)) %% 360))
+    solar_longitude_diff <- append(solar_longitude_diff,((sun_longitude(rise + offsets[i]) - sun_longitude(rise)) %% 360))
+    total_motion <- append(total_motion,(lunar_longitude_diff[i] + solar_longitude_diff[i]))
+  }
+  # 5. Find end time by 4-point inverse Lagrange interpolation
+  y = total_motion
+  x = offsets
+  # compute fraction of day (after sunrise) needed to traverse 'degrees_left'
+  approx_end = inverse_lagrange(x, y, degrees_left)
+  ends = (rise + approx_end - jd) * 24 + tz
+  answer = c(as.integer(yog),to_dms(ends))
+
+  # 5. Check for skipped yoga
+  lunar_long_tmrw = (moon_longitude(rise + 1) - swe_get_ayanamsa_ex_ut(rise + 1,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  solar_long_tmrw = (sun_longitude(rise + 1) - swe_get_ayanamsa_ex_ut(rise + 1,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  total_tmrw = (lunar_long_tmrw + solar_long_tmrw) %% 360
+  tomorrow = ceiling(total_tmrw * 27 / 360)
+  if(((tomorrow - yog) %% 27) > 1){
+    # interpolate again with same (x,y)
+    leap_yog = yog + 1
+    degrees_left = leap_yog * (360 / 27) - total
+    approx_end = inverse_lagrange(x, y, degrees_left)
+    ends = (rise + approx_end - jd) * 24 + tz
+    answer <- append(answer,c(as.integer(leap_yog),to_dms(ends)))
+  }
+  return (answer)
+}
+```
 
 The \textbf{Ayanamsa} which is obtained from the \textit{Swiss Ephemeris} and is set to \textit{Lahiri Ayanamsa}. \textbf{Date} as Julian's day number and the \textbf{place} as latitude, longitude, and time zone are passed as arguments of the function. The \textit{sunrise} for the given date and place is found using the sunrise function which uses the \textit{Swiss Ephemeris} to get the sunrise as a Julian day number. The \textit{Nirayana} longitudes of the sun and moon are obtained by subtracting \textit{Ayanamsa} from their \textit{Sayana longitudes}. The sum of \textit{Nirayana longitudes} of \textbf{Moon} and \textbf{Sun} is obtained and their mod 360 is performed so that the sum does not exceed 360. The resulting sum is multiplied by 27 and then divided by 360 to get Yoga as a decimal number. The fractional part of the Yoga is used to find out the remaining degrees to the next Yoga which is used to find the time when that Yoga ends. The time taken to complete the remaining degrees is given by \textit{Inverse Lagrange’s interpolation} of the Yoga found by using the lunar and solar longitudes at the intervals of 0.25 days from sunrise. The obtained Yoga and its ending time are added to the output vector. Sometimes two Yogas can occur on a given date so, we check for skipped Yoga  by checking the Yoga of the next day and if a Yoga is skipped then, the skipped Yoga is included in the output with its ending time.
 
@@ -278,6 +389,15 @@ get_yoga_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 
 A \textbf{Karana} is half of a tithi or when the moon traverses 6° in longitude relative to the sun. In \textit{30 tithis} of a lunar month, there are 60 \textit{Karanas} or half-tithis.
 
+### Calculation of Karana
+
+```{r}
+karana <- function(jd,place){
+  tithi_ = tithi(jd,place)
+  answer <- c((tithi_[1] * 2) - 1,tithi_[1] * 2)
+  return(answer)
+}
+```
 
 To find out Karana for a given date and place where, \textbf{date} is given as a \textit{Julian day number} and \textbf{place} as latitude, longitude and time zone. Date and place are passed to the Tithi function which finds out the Tithi(s). This Tithis are used to output corresponding Karnas.
 
@@ -318,7 +438,6 @@ karana(jd,place)
 karana(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 ```
 
-\break
 ### Karana's name
 
 Get name(s) of the Karana for given Julian day number and place.
