@@ -21,7 +21,8 @@ output:
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  tidy.opts = list(width.cutoff = 60), tidy = TRUE
 )
 ```
 
@@ -57,6 +58,58 @@ library(VedicDateTime)
 \textbf{Tithi} can be called as a lunar day. When the moon traverses 12° in longitude relative to the sun, a tithi is completed. Fifteen tithis in the waxing phase (\textit{Shukla paksha}) with end tithi as full moon day (\textit{Purnima}) and other fifteen tithis in the waning phase (\textit{Krishna paksha}) with end tithi as new moon day (\textit{Amavasya}). These phases together constitute a lunar month which is of thirty tithis.
 
 Tithi doesn't require \textit{Ayanamsa} because it is the difference of longitudes and even if \textit{Ayanamsa} is subtracted from each longitude, it doesn't matter.
+
+\break
+### Calculation of Tithi
+
+```{r Tithi, width="50"}
+tithi<-function(jd,place){
+  # Tithi as -> 1 = Shukla paksha prathama, 2 = Shukla paksha dvitiya,...
+
+  tz = place[3] #Timezone of the place
+
+  #1. Find time of sunrise at a given place
+  rise = sunrise(jd,place)[1] - (tz/24)
+
+  #2. Find tithi on this Julian day number at a given place
+  moon_phase = lunar_phase(rise)
+  today = ceiling(moon_phase/12)
+  degrees_left = today * 12 - moon_phase
+
+  # 3. Compute longitudinal differences at intervals of 0.25 days from sunrise
+  offsets = c(0.25,0.5,0.75,1.0)
+  lunar_longitude_diff = c()
+  solar_longitude_diff = c()
+  relative_motion = c()
+  for(i in 1:length(offsets)){
+    lunar_longitude_diff <- append(lunar_longitude_diff,((moon_longitude(rise + offsets[i]) - moon_longitude(rise)) %% 360));
+    solar_longitude_diff <- append(solar_longitude_diff,((sun_longitude(rise + offsets[i]) - sun_longitude(rise)) %% 360));
+    relative_motion <- append(relative_motion,(lunar_longitude_diff[i]- solar_longitude_diff[i]))
+  }
+  # 4. Find end time by 4-point inverse Lagrange interpolation
+  y = relative_motion
+  x = offsets
+  # Compute fraction of day (after sunrise) needed to traverse 'degrees_left'
+  approx_end = inverse_lagrange(x,y,degrees_left)
+  ends = (rise + approx_end - jd) * 24 + tz
+  answer = c(as.integer(today),to_dms(ends))
+
+  # 5. Check for skipped tithi
+  moon_phase_tom = lunar_phase(rise + 1)
+  tomorrow = ceiling(moon_phase_tom/12)
+  if(((tomorrow-today) %% 30) > 1){
+    # interpolate again with same (x,y)
+    leap_tithi = today + 1
+    degrees_left = leap_tithi * 12 - moon_phase
+    approx_end = inverse_lagrange(x,y,degrees_left)
+    ends = (rise + approx_end - jd) * 24 + tz
+    answer <- append(answer,c(as.integer(leap_tithi),to_dms(ends)))
+  }
+  return (answer)
+}
+```
+
+
 
 At first, we take the \textbf{date} as Julian's day number and \textbf{place} as the latitude, longitude, and time zone of the place for which the calculations are to be made as parameters of the function. The \textbf{sunrise} for the given date and place is found using another function which uses the \textit{Swiss-ephemeris} to get the sunrise as a Julian day number. Tithi is found out during the sunrise as the difference between lunar and solar longitudes divided by 12. Tithi is generally obtained as a decimal number. The fractional part of the Tithi is used to find out the remaining degrees to the next Tithi which is used to find the time when that Tithi ends. The time taken to complete the remaining degrees is given by \textit{Inverse Lagrange’s interpolation} of the Tithis found by using the lunar and solar longitudes at the intervals of 0.25 days from sunrise. The obtained Tithi and its ending time are added to the output vector. Sometimes two Tithis can occur on a given date so, we check for skipped tithi by checking the Tithi of the next day and if a Tithi is skipped then, the skipped Tithi is included in the output with its ending time.
 
