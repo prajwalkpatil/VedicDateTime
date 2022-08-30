@@ -255,7 +255,7 @@ karanas <- c(
   "Naga"
 )
 
-raasis <- c(
+rashis <- c(
   "Mesha",
   "Vrushabha",
   "Mithuna",
