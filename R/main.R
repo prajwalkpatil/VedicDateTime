@@ -529,7 +529,7 @@ vaara <- function(jd){
 #'
 #' @examples
 #' lagna(2459778)
-#' lagna(swe_julday(2022,7,14,0,SE$GREG_CAL))
+#' lagna(gregorian_to_jd(30,8,2022))
 lagna <- function(jd){
   swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
   s = sun_longitude(jd)
@@ -549,7 +549,7 @@ lagna <- function(jd){
 #'
 #' @examples
 #' rashi(2459778)
-#' rashi(swe_julday(2022,7,14,0,SE$GREG_CAL))
+#' rashi(gregorian_to_jd(30,8,2022))
 rashi <- function(jd){
   swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
   s = moon_longitude(jd)
@@ -636,7 +636,7 @@ masa(swe_julday(2022,6,17,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
 #'
 #' @examples
 #' ahargana(2459778)
-#' ahargana(swe_julday(2022,7,14,0,SE$GREG_CAL))
+#' ahargana(gregorian_to_jd(30,8,2022))
 ahargana <- function(jd){
   return (jd - 588465.5)
 }
@@ -741,7 +741,7 @@ get_ritu_name <- function(masa_num){
 #'
 #' @examples
 #' day_duration(2459778,c(15.34, 75.13, +5.5))
-#' day_duration(swe_julday(2022,7,14,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+#' day_duration(gregorian_to_jd(30,8,2022),c(15.34, 75.13, +5.5))
 day_duration <- function(jd,place){
   srise = sunrise(jd,place)[1]
   sset = sunrise(jd,place)[1]
@@ -761,7 +761,7 @@ day_duration <- function(jd,place){
 #'
 #' @examples
 #' get_masa_name(2459778,c(15.34, 75.13, +5.5))
-#' get_masa_name(swe_julday(2022,7,14,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+#' get_masa_name(gregorian_to_jd(30,8,2022),c(15.34, 75.13, +5.5))
 get_masa_name <- function(jd,place){
   masa_ = masa(jd,place)
   masa_name = ""
@@ -786,7 +786,7 @@ get_masa_name(swe_julday(2022,7,29,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
 #'
 #' @examples
 #' get_tithi_name(2459778,c(15.34, 75.13, +5.5))
-#' get_tithi_name(swe_julday(2022,7,14,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+#' get_tithi_name(gregorian_to_jd(30,8,2022),c(15.34, 75.13, +5.5))
 get_tithi_name <- function(jd,place){
   tithi_ = tithi(jd,place)
   size = length(tithi_)
@@ -817,7 +817,7 @@ get_tithi_name <- function(jd,place){
 #'
 #' @examples
 #' get_nakshatra_name(2459778,c(15.34, 75.13, +5.5))
-#' get_nakshatra_name(swe_julday(2022,7,14,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+#' get_nakshatra_name(gregorian_to_jd(30,8,2022),c(15.34, 75.13, +5.5))
 get_nakshatra_name <- function(jd,place){
   nakshatra_ = nakshatra(jd,place)
   size = length(nakshatra_)
@@ -847,7 +847,7 @@ get_nakshatra_name <- function(jd,place){
 #'
 #' @examples
 #' get_karana_name(2459778,c(15.34, 75.13, +5.5))
-#' get_karana_name(swe_julday(2022,7,14,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+#' get_karana_name(gregorian_to_jd(30,8,2022),c(15.34, 75.13, +5.5))
 get_karana_name <- function(jd,place){
   karana_ = karana(jd,place)
   karana_name = paste(karanas[karana_[1]],karanas[karana_[2]],sep = "-")
@@ -867,7 +867,7 @@ get_karana_name <- function(jd,place){
 #'
 #' @examples
 #' get_yoga_name(2459778,c(15.34, 75.13, +5.5))
-#' get_yoga_name(swe_julday(2022,7,14,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+#' get_yoga_name(gregorian_to_jd(30,8,2022),c(15.34, 75.13, +5.5))
 get_yoga_name <- function(jd,place){
   yoga_ = yoga(jd,place)
   size = length(yoga_)
@@ -914,7 +914,7 @@ get_rashi_name <- function(jd){
 #'
 #' @examples
 #' get_lagna_name(2459778)
-#' get_lagna_name(swe_julday(2022,7,14,0,SE$GREG_CAL))
+#' get_lagna_name(gregorian_to_jd(30,8,2022))
 get_lagna_name <- function(jd){
   return(raasis[lagna(jd)])
 }
@@ -931,7 +931,7 @@ get_lagna_name <- function(jd){
 #'
 #' @examples
 #' get_vaara_name(2459778)
-#' get_vaara_name(swe_julday(2022,7,14,0,SE$GREG_CAL))
+#' get_vaara_name(gregorian_to_jd(30,8,2022))
 get_vaara_name <- function(jd){
   return(varas[vaara(jd)])
 }
