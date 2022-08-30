@@ -519,18 +519,18 @@ vaara <- function(jd){
 # ---------------------------------------------------------------------------- #
 
 # ---------------------------------------------------------------------------- #
-#' raasi
+#' Lagna
 #'
-#' @description Raasi(Sun-sign) for a given Julian day number
+#' @description Lagna for a given Julian day number
 #'
 #' @param jd Julian day number
 #'
-#' @return Raasi as an integer
+#' @return Lagna as an integer
 #'
 #' @examples
-#' raasi(2459778)
-#' raasi(swe_julday(2022,7,14,0,SE$GREG_CAL))
-raasi <- function(jd){
+#' lagna(2459778)
+#' lagna(swe_julday(2022,7,14,0,SE$GREG_CAL))
+lagna <- function(jd){
   swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
   s = sun_longitude(jd)
   solar_nirayana = (sun_longitude(jd) - swe_get_ayanamsa_ex_ut(jd,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
@@ -539,18 +539,18 @@ raasi <- function(jd){
 # ---------------------------------------------------------------------------- #
 
 # ---------------------------------------------------------------------------- #
-#' moonsign
+#' Rashi
 #'
-#' @description Moon-sign for a given Julian day number
+#' @description Rashi for a given Julian day number
 #'
 #' @param jd Julian day number
 #'
-#' @return Moonsign as an integer
+#' @return Rashi as an integer
 #'
 #' @examples
-#' moonsign(2459778)
-#' moonsign(swe_julday(2022,7,14,0,SE$GREG_CAL))
-moonsign <- function(jd){
+#' rashi(2459778)
+#' rashi(swe_julday(2022,7,14,0,SE$GREG_CAL))
+rashi <- function(jd){
   swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
   s = moon_longitude(jd)
   lunar_nirayana = (moon_longitude(jd) - swe_get_ayanamsa_ex_ut(jd,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
@@ -887,36 +887,36 @@ get_yoga_name <- function(jd,place){
 
 
 # ---------------------------------------------------------------------------- #
-#' get_raasi_name
+#' get_rashi_name
 #'
-#' @description Get name of the Raasi for given Julian day number.
+#' @description Get name of the Rashi for given Julian day number.
 #'
 #' @param jd Julian day number
 #'
-#' @return Name of the Raasi.
+#' @return Name of the Rashi.
 #'
 #' @examples
-#' get_raasi_name(2459778)
-#' get_raasi_name(swe_julday(2022,7,14,0,SE$GREG_CAL))
-get_raasi_name <- function(jd){
-  return(raasis[raasi(jd)])
+#' get_rashi_name(2459778)
+#' get_rashi_name(gregorian_to_jd(30,8,2022))
+get_rashi_name <- function(jd){
+  return(rashis[rashi(jd)])
 }
 # ---------------------------------------------------------------------------- #
 
 
 # ---------------------------------------------------------------------------- #
-#' get_moonsign_name
-#' @description Get name of the moonsign for given Julian day number.
+#' get_lagna_name
+#' @description Get name of the Lagna for given Julian day number.
 #'
 #' @param jd Julian day number
 #'
-#' @return Name of the Moonsign.
+#' @return Name of the lagna.
 #'
 #' @examples
-#' get_moonsign_name(2459778)
-#' get_moonsign_name(swe_julday(2022,7,14,0,SE$GREG_CAL))
-get_moonsign_name <- function(jd){
-  return(raasis[moonsign(jd)])
+#' get_lagna_name(2459778)
+#' get_lagna_name(swe_julday(2022,7,14,0,SE$GREG_CAL))
+get_lagna_name <- function(jd){
+  return(raasis[lagna(jd)])
 }
 # ---------------------------------------------------------------------------- #
 
