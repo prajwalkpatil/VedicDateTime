@@ -1,16 +1,16 @@
 # ---------------------------------------------------------------------------- #
-#' raasi
+#' Lagna
 #'
-#' @description Raasi(Sun-sign) for a given Julian day number
+#' @description Lagna for a given Julian day number
 #'
 #' @param jd Julian day number
 #'
-#' @return Raasi as an integer
+#' @return Lagna as an integer
 #'
 #' @examples
-#' raasi(2459778)
-#' raasi(swe_julday(2022,7,14,0,SE$GREG_CAL))
-raasi <- function(jd){
+#' lagna(2459778)
+#' lagna(gregorian_to_jd(30,8,2022))
+lagna <- function(jd){
   swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
   s = sun_longitude(jd)
   solar_nirayana = (sun_longitude(jd) - swe_get_ayanamsa_ex_ut(jd,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360

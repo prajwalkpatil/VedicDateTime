@@ -1,16 +1,16 @@
 # ---------------------------------------------------------------------------- #
-#' moonsign
+#' Rashi
 #'
-#' @description Moon-sign for a given Julian day number
+#' @description Rashi for a given Julian day number
 #'
 #' @param jd Julian day number
 #'
-#' @return Moonsign as an integer
+#' @return Rashi as an integer
 #'
 #' @examples
-#' moonsign(2459778)
-#' moonsign(swe_julday(2022,7,14,0,SE$GREG_CAL))
-moonsign <- function(jd){
+#' rashi(2459778)
+#' rashi(gregorian_to_jd(30,8,2022))
+rashi <- function(jd){
   swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
   s = moon_longitude(jd)
   lunar_nirayana = (moon_longitude(jd) - swe_get_ayanamsa_ex_ut(jd,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
