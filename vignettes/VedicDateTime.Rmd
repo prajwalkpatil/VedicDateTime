@@ -8,23 +8,25 @@ output:
   html_document:
     toc: yes
     df_print: paged
-  word_document:
-    toc: yes
   rmdformats::readthedown:
     self_contained: yes
     thumbnails: yes
     lightbox: yes
     gallery: no
     highlight: tango
+  word_document:
+    toc: yes
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  tidy.opts = list(width.cutoff = 60), tidy = TRUE
+  tidy.opts = list(width.cutoff = 60), tidy = TRUE,
+  cache.rebuild = TRUE
 )
 ```
+
 
 ```{r, include = FALSE}
 install.packages("swephR",repos = "https://CRAN.R-project.org/package=swephR")
@@ -456,6 +458,16 @@ get_karana_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 
 ## Masa
 
+\textbf{Masa} is the lunar month in the Vedic calendar system. The year as per the Hindu calendar starts from \textit{Chaitra masa} and ends at \textit{Phalguna masa}. Every masa has a fixed number of \textit{Tithis}. A Masa has  \textbf{2 Pakshas} (\textit{Krishna paksha} and \textit{Shukla paksha}) - \textbf{30 Tithis} in total.
+
+
+\textit{Chaitra Masa} doesn’t begin on the 1st January of the Gregorian calendar. It rather begins on \textit{Ugadi} (\textit{Gudi Padva} or Hindu new year) which starts when \textit{Amavasya Tithi} (New moon) of the \textit{Phalguna masa} ends.
+
+
+In one year, the number of Masas is not fixed as there can be 12 or 13 Masas in it. When the number of Tithis in a Masa is fixed, to compensate for the remaining days (Like in the Gregorian calendar which has 28-31 days in a month) an intercalary month is added every 32.5 months. This extra masa is called \textit{Adhika Masa}. It is usually referred by adding a suffix of its previous masa like – \textit{Adhika Jyeshtha masa}. It can occur between any two Masas but, it follows a regular interval of 32.5 months.
+
+\break
+
 Masa for a given place and time.
 
 ```{r}
@@ -492,6 +504,18 @@ get_masa_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 
 ## Ritu
 
+\textbf{Ritu} means \textbf{season}. There are 6 Ritus which represent the 6 seasons. The year starts from \textit{Vasanta ritu} which is the spring season and ends at \textit{Shishir Ritu} which is the winter season.
+
+The following are the Ritus , seasons they represent and their respective Masas - 
+
+1. Vasant -- Spring   (Chaitra and Vaishakha)
+2. Grishma -- Summer (Jyestha and Ashadha)
+3. Varsha -- Monsoon (Shravana and Bhadrapada)
+4. Sharad -- Autumn (Ashwin and Kartika)
+5. Hemant -- Prewinter (Margashira and Pushya)
+6. Shishir -- Winter (Magha and Phalguna)
+
+
 Returns the number associated with Ritu from a Masa.
 
 ```{r}
@@ -517,6 +541,8 @@ get_ritu_name(masa_num)
 ```
 
 ## Samvatsara
+
+\textbf{Samvatsara} means \textit{Year} in \textit{Sanskrit}. It is a cycle of 60 Samvatsaras in Hindu Panchang which is of 60 years. There are different types of Samvatsaras based on the point which is considered as their starting point. \textit{Saka Samvatsara}, the epoch of which corresponds to Julian year 78 and \textit{Vikram Samvatsara} which is ahead of \textit{Saka Samvatsara} by 135 years are some of the commonly used calendar systems. The naming used by Samvatsara systems is cyclic in nature.
 
 Returns number associated with the name of the Shaka Samvatsar for a given Julian day number and maasa number.
 
@@ -550,48 +576,48 @@ masa_num <- masa(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))[1]
 get_samvatsara_name(jd,masa_num)
 ```
 
-## Raasi
+## Rashi
 
-Raasi(Sun-sign) for a given Julian day number
+Rashi(Moon-sign) for a given Julian day number
 
 ```{r}
 jd <- gregorian_to_jd(17,6,2022) #Julian day number
-raasi(jd)
+rashi(jd)
 ```
 
-### Raasi's name
+### Rashi's name
 
-The following are \textbf{Raasis} with their corresponding numbers -
+The following are \textbf{Rashis} with their corresponding numbers -
 
 ```{r echo=FALSE}
-for (i in 1:length(raasis)){
-  print(paste(i," - ",raasis[i]))
+for (i in 1:length(rashis)){
+  print(paste(i," - ",rashis[i]))
 }
 ```
 
-Gives name of the Raasi(Sun-sign) for a given Julian day number
+Gives name of the Rashi(Sun-sign) for a given Julian day number
 
 ```{r}
 jd <- gregorian_to_jd(17,6,2022) #Julian day number
-get_raasi_name(jd)
+get_rashi_name(jd)
 ```
 
-## Moon-sign
+## Lagna
 
-Moonsign for a given Julian day number
+Lagna(sun-sign) for a given Julian day number
 
 ```{r}
 jd <- gregorian_to_jd(17,6,2022) #Julian day number
-moonsign(jd)
+lagna(jd)
 ```
 
-### Moonsign's name
+### Lagna's name
 
-Gives name of the moonsign for a given Julian day number
+Gives name of the lagna for a given Julian day number
 
 ```{r}
 jd <- gregorian_to_jd(17,6,2022) #Julian day number
-get_moonsign_name(jd)
+get_lagna_name(jd)
 ```
 
 # Intermediate functions
