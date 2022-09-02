@@ -17,8 +17,8 @@ masa <- function(jd,place){
   critical = sunrise(jd,place)[1]
   last_new_moon = new_moon(critical,ti,-1)
   next_new_moon = new_moon(critical,ti,+1)
-  this_solar_month = raasi(last_new_moon)
-  next_solar_month = raasi(next_new_moon)
+  this_solar_month = rashi(last_new_moon)
+  next_solar_month = rashi(next_new_moon)
   is_leap_month = (this_solar_month == next_solar_month)
   maasa = this_solar_month + 1
   if(maasa > 12){

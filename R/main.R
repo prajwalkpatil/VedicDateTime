@@ -607,15 +607,15 @@ new_moon <- function(jd,tithi_,opt = -1){
 #'
 #' @examples
 #' masa(2459778,c(15.34, 75.13, +5.5))
-#' masa(swe_julday(2022,7,14,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+#' masa(gregorian_to_jd(30,8,2022),c(15.34, 75.13, +5.5))
 masa <- function(jd,place){
   #Masa as -> 1 = Chaitra, 2 = Vaisakha, ..., 12 = Phalguna
   ti = tithi(jd,place)[1]
   critical = sunrise(jd,place)[1]
   last_new_moon = new_moon(critical,ti,-1)
   next_new_moon = new_moon(critical,ti,+1)
-  this_solar_month = raasi(last_new_moon)
-  next_solar_month = raasi(next_new_moon)
+  this_solar_month = rashi(last_new_moon)
+  next_solar_month = rashi(next_new_moon)
   is_leap_month = (this_solar_month == next_solar_month)
   maasa = this_solar_month + 1
   if(maasa > 12){
@@ -916,7 +916,7 @@ get_rashi_name <- function(jd){
 #' get_lagna_name(2459778)
 #' get_lagna_name(gregorian_to_jd(30,8,2022))
 get_lagna_name <- function(jd){
-  return(raasis[lagna(jd)])
+  return(rashis[lagna(jd)])
 }
 # ---------------------------------------------------------------------------- #
 
@@ -948,7 +948,7 @@ get_tithi_name(jul21,gulbarga)
 get_nakshatra_name(jul21,gulbarga)
 get_yoga_name(jul21,gulbarga)
 get_karana_name(jul21,gulbarga)
-get_raasi_name(jul21)
+get_rashi_name(jul21)
 get_vaara_name(jul21)
 
 masas[masa(jul21,gulbarga)]
