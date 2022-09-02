@@ -456,6 +456,85 @@ get_karana_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 
 # Other functions
 
+## Rashi
+
+The zodiac is divided into 12 parts - Aries (\textit{Mesha}), Taurus (\textit{Vrishabha}), Gemini (\textit{Mithuna}), Cancer (\textit{Karka}), Leo (\textit{Simha}), Virgo (\textit{Kanya}), Libra (\textit{Tula}), Scorpio (\textit{Vruschika}), Sagittarius (\textit{Dhanu}), Capricorn (\textit{Makara}), Aquarius (\textit{Kumbha}), and Pisces (\textit{Meena}).
+
+\textbf{Rashi} (moon sign) represents the position of the moon on the zodiac at a given time.
+
+### Calculation of Rashi
+
+```{r}
+rashi <- function(jd){
+  swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
+  s = moon_longitude(jd)
+  lunar_nirayana = (moon_longitude(jd) - swe_get_ayanamsa_ex_ut(jd,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  return (ceiling(lunar_nirayana / 30))
+}
+```
+
+The \textit{Ayanamsa} is set to \textit{Lahiri ayanamsa} and the lunar longitude(tropical) is obtained for the given date which is taken as the Julian day number. The sidereal (\textit{Nirayana}) longitude of the moon is calculated by subtracting the Ayanamsa from the obtained tropical longitude then a mod of 360 is performed to ensure that it doesn’t exceed 360 and the result is divided by 30 to obtain Rashi as an integer.
+
+
+Rashi(Moon-sign) for a given Julian day number -
+
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+rashi(jd)
+```
+
+### Rashi's name
+
+The following are \textbf{Rashis} with their corresponding numbers -
+
+```{r echo=FALSE}
+for (i in 1:length(rashis)){
+  print(paste(i," - ",rashis[i]))
+}
+```
+
+Gives name of the Rashi(Sun-sign) for a given Julian day number
+
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+get_rashi_name(jd)
+```
+
+## Lagna
+
+\textbf{Lagna} (sun sign) represents the position of the sun on the zodiac at a given time.
+
+### Calculation of Lagna
+
+```{r}
+lagna <- function(jd){
+  swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
+  s = sun_longitude(jd)
+  solar_nirayana = (sun_longitude(jd) - swe_get_ayanamsa_ex_ut(jd,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  return (ceiling(solar_nirayana / 30))
+}
+```
+
+The \textit{Ayanamsa} is set to \textit{Lahiri ayanamsa} and the solar longitude(tropical) is obtained for the given date which is taken as the Julian day number. The sidereal (\textit{Nirayana}) longitude of the sun is calculated by subtracting the Ayanamsa from the obtained tropical longitude then a mod of 360 is performed to ensure that it doesn’t exceed 360 and the result is divided by 30 to obtain Lagna as an integer.
+
+
+Lagna(sun-sign) for a given Julian day number -
+
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+lagna(jd)
+```
+
+### Lagna's name
+
+Gives name of the lagna for a given Julian day number
+
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+get_lagna_name(jd)
+```
+
+
 ## Masa
 
 \textbf{Masa} is the lunar month in the Vedic calendar system. The year as per the Hindu calendar starts from \textit{Chaitra masa} and ends at \textit{Phalguna masa}. Every masa has a fixed number of \textit{Tithis}. A Masa has  \textbf{2 Pakshas} (\textit{Krishna paksha} and \textit{Shukla paksha}) - \textbf{30 Tithis} in total.
@@ -466,7 +545,31 @@ get_karana_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 
 In one year, the number of Masas is not fixed as there can be 12 or 13 Masas in it. When the number of Tithis in a Masa is fixed, to compensate for the remaining days (Like in the Gregorian calendar which has 28-31 days in a month) an intercalary month is added every 32.5 months. This extra masa is called \textit{Adhika Masa}. It is usually referred by adding a suffix of its previous masa like – \textit{Adhika Jyeshtha masa}. It can occur between any two Masas but, it follows a regular interval of 32.5 months.
 
-\break
+
+As there is the lunar year with the extra month (\textit{Adhika masa}), so it there a lunar year with a diminished or reduced month, with only eleven months only is very rare indeed. It occurs once in 140 years or once in 190 years it is called \textit{Kshaya Masa} or Lost Month.
+
+### Calculation of Masa
+
+```{r}
+masa <- function(jd,place){
+  #Masa as -> 1 = Chaitra, 2 = Vaisakha, ..., 12 = Phalguna
+  ti = tithi(jd,place)[1]
+  critical = sunrise(jd,place)[1]
+  last_new_moon = new_moon(critical,ti,-1)
+  next_new_moon = new_moon(critical,ti,+1)
+  this_solar_month = lagna(last_new_moon)
+  next_solar_month = lagna(next_new_moon)
+  is_leap_month = (this_solar_month == next_solar_month)
+  maasa = this_solar_month + 1
+  if(maasa > 12){
+    maasa = maasa %% 12
+  }
+  return (c(as.integer(maasa),is_leap_month))
+}
+```
+
+At first, the \textit{Tithi} and sunrise of the given date and place is obtained then, the previous and next new moon is obtained from the given date and calculated \textit{tithi}. The sun sign(\textit{lagna}) for the previous and next new moon day is obtained. If these two sun-signs are same then the Masa is \textit{Adhika masa}. The masa number is one added to the sun sign of this month. Its mod 12 is returned so that it does not exceed 12.
+
 
 Masa for a given place and time.
 
@@ -515,6 +618,14 @@ The following are the Ritus , seasons they represent and their respective Masas 
 5. Hemant -- Prewinter (Margashira and Pushya)
 6. Shishir -- Winter (Magha and Phalguna)
 
+### Calculations of Ritu
+
+```{r}
+ritu <- function(masa_num){
+  return (((masa_num - 1) %/% 2) + 1)
+}
+```
+
 
 Returns the number associated with Ritu from a Masa.
 
@@ -542,7 +653,36 @@ get_ritu_name(masa_num)
 
 ## Samvatsara
 
-\textbf{Samvatsara} means \textit{Year} in \textit{Sanskrit}. It is a cycle of 60 Samvatsaras in Hindu Panchang which is of 60 years. There are different types of Samvatsaras based on the point which is considered as their starting point. \textit{Saka Samvatsara}, the epoch of which corresponds to Julian year 78 and \textit{Vikram Samvatsara} which is ahead of \textit{Saka Samvatsara} by 135 years are some of the commonly used calendar systems. The naming used by Samvatsara systems is cyclic in nature.
+\textbf{Samvatsara} means \textit{Year} in \textit{Sanskrit}. It is a cycle of 60 Samvatsaras in Hindu Panchang which is of 60 years. There are different types of Samvatsaras based on the point which is considered as their starting point. \textit{Saka Samvatsara}, the epoch of which corresponds to Julian year 78 and \textit{Vikram Samvatsara} which is ahead of \textit{Saka Samvatsara} by 135 years are some of the commonly used calendar systems.
+
+### Calculations of Samvatsara
+
+```{r}
+ahargana <- function(jd){
+  return (jd - 588465.5)
+}
+
+
+elapsed_year <- function(jd,maasa_num){
+  sidereal_year = 365.25636
+  ahar = ahargana(jd)
+  kali = as.integer((ahar + (4 - maasa_num) * 30) / sidereal_year)
+  saka = kali - 3179
+  vikrama = saka + 135
+  return (c(kali, saka, vikrama))
+}
+
+
+samvatsara <- function(jd,maasa_num){
+  kali = elapsed_year(jd,maasa_num)[1]
+  if(kali >= 4009){
+    kali = (kali - 14) %% 60
+  }
+  samvat = (kali + 27 + as.integer((kali * 211 - 108)/18000)) %% 60
+  return (samvat)
+}
+```
+
 
 Returns number associated with the name of the Shaka Samvatsar for a given Julian day number and maasa number.
 
@@ -576,51 +716,10 @@ masa_num <- masa(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))[1]
 get_samvatsara_name(jd,masa_num)
 ```
 
-## Rashi
-
-Rashi(Moon-sign) for a given Julian day number
-
-```{r}
-jd <- gregorian_to_jd(17,6,2022) #Julian day number
-rashi(jd)
-```
-
-### Rashi's name
-
-The following are \textbf{Rashis} with their corresponding numbers -
-
-```{r echo=FALSE}
-for (i in 1:length(rashis)){
-  print(paste(i," - ",rashis[i]))
-}
-```
-
-Gives name of the Rashi(Sun-sign) for a given Julian day number
-
-```{r}
-jd <- gregorian_to_jd(17,6,2022) #Julian day number
-get_rashi_name(jd)
-```
-
-## Lagna
-
-Lagna(sun-sign) for a given Julian day number
-
-```{r}
-jd <- gregorian_to_jd(17,6,2022) #Julian day number
-lagna(jd)
-```
-
-### Lagna's name
-
-Gives name of the lagna for a given Julian day number
-
-```{r}
-jd <- gregorian_to_jd(17,6,2022) #Julian day number
-get_lagna_name(jd)
-```
 
 # Intermediate functions
+
+The following functions use the functions of \textbf{SwephR - Swiss Ephemeris} to return results. 
 
 ## Gregorian to JD
 
