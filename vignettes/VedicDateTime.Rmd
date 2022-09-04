@@ -1,7 +1,6 @@
 ---
-title: "VedicDateTime"
-author: "Prajwal Patil"
-output:
+title: "VedicDateTime: An R package to implement Vedic calendar system"
+output:   
   pdf_document:
     toc: yes
     highlight: arrow
@@ -39,7 +38,7 @@ options(digits = 5)
 
 # Introduction
 
-The whole concept of \textit{VedicDateTime} is based on the Hindu calendar system. The lunisolar Hindu calendar finds its origins in a book called \textit{Surya Siddhanta}, an ancient Sanskrit text on astronomy. Even today, this calendar is prevalent in India and it is mostly found in \textit{Hindu Panchanga} an Indian almanac that details information about the various festivals, rituals, and planetary combinations and has been in use since time immemorial in the Indian subcontinent. This Panchanga can be commonly found in most Indian homes.
+The whole concept of \textit{VedicDateTime} is based on the Hindu calendar system. The lunisolar Hindu calendar and its aspects are as old as \textit{Surya Siddhanta}, an ancient Sanskrit text on astronomy \footnote{Oak, N., \& Bhaty, R. (2019). Ancient updates to Surya-Siddhanta. Indiafacts.Org. Retrieved September 4, 2022, from \url{https://indiafacts.org/ancient-updates-to-surya-siddhanta/}}. Even today, this calendar is prevalent in India and it is mostly found in \textit{Hindu Panchanga} an Indian almanac that details information about the various festivals, rituals, and planetary combinations and has been in use since time immemorial in the Indian subcontinent. This Panchanga can be commonly found in most Indian homes\footnote{Charak, K. S. (2012). Elements of Vedic Astrology (2 Volume Set) (Third Edition). UMA Publications.}.
 
 The \textit{VedicDateTime} package aims to convert the commonly used Gregorian date-time to the Vedic date-time as per the calculations of the \textit{Panchang}. Panchanga which means 'five arms' consists of the five most important parts - \textit{Tithi, Vaara, Nakshatra, Yoga,} and \textit{Karana}. The \textit{Vaara} or the day of the week is based on Sun alone; \textit{Tithi} and \textit{Karana} are based upon Moon alone; \textit{Nakshatra} and \textit{Yoga} are based upon both Moon and Sun. This makes the Hindu calendar a true lunisolar calendar. \textit{VedicDateTime} contributes a new calendar system in R that can have huge potential to discover meaningful patterns in natural time series.
 
@@ -59,7 +58,7 @@ library(VedicDateTime)
 
 \textbf{Tithi} can be called as a lunar day. When the moon traverses 12° in longitude relative to the sun, a tithi is completed. Fifteen tithis in the waxing phase (\textit{Shukla paksha}) with end tithi as full moon day (\textit{Purnima}) and other fifteen tithis in the waning phase (\textit{Krishna paksha}) with end tithi as new moon day (\textit{Amavasya}). These phases together constitute a lunar month which is of thirty tithis.
 
-Tithi doesn't require \textit{Ayanamsa} because it is the difference of longitudes and even if \textit{Ayanamsa} is subtracted from each longitude, it doesn't matter.
+Tithi doesn't require \textit{Ayanamsa} because it is the difference of longitudes and even if \textit{Ayanamsa} is subtracted from each longitude, it doesn't matter\footnote{Ramakumar, K. L. (2011). Panchangam calculations. \url{https://archive.org/details/PanchangamCalculations}}.
 
 \break
 ### Calculation of Tithi
@@ -120,10 +119,15 @@ jd <- 2459778 #Julian day number
 place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
 tithi(jd,place)
 ```
+In the above output, the first number represents the number associated with the respective Tithi. 20 represents \textbf{Krishna paksha panchami}. This tithi ends at \textbf{20 hours 55 minutes and 35 seconds} which is represented by the rest of the numbers.
+
 
 ```{r}
 tithi(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 ```
+In the above output, 6 numbers are returned out of which the first 3 numbers represent the Tithi name and ending time of the first Tithi and the next 3 numbers represent the Tithi name and ending time of the second Tithi. Here, on \textbf{17th June 2022}, two Tithis had occurred - 18 which represents \textbf{Krishna paksha trititya} ending at \textbf{6hrs 11mins and 26secs} and 19 which represents \textbf{Krishna paksha chaturthi} ending at \textbf{2hrs 59mins and 58secs} on the next day \textbf{18th June 2022}.
+
+The timings greater than 24:00 represents the time past midnight. The ending time of that Tithi in the next day can be obtained by subtracting 24 from the hours.
 
 ### Tithi's name
 
