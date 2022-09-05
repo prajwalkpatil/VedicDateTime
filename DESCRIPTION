@@ -16,7 +16,9 @@ RoxygenNote: 7.2.1
 Suggests: 
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    qpdf,
+    formatR
 VignetteBuilder: knitr
 Imports: swephR
 Config/testthat/edition: 3
