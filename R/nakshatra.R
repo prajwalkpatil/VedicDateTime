@@ -15,7 +15,7 @@ nakshatra <- function(jd,place){
   #Nakshatra as -> 1 = Ashwini, 2 = Bharani, ..., 27 = Revati
 
   #Set Lahiri ayanamsa
-  swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
+  swephR::swe_set_sid_mode(swephR::SE$SIDM_LAHIRI,0,0)
 
   # 1. Find time of sunrise
   lat = place[1]
@@ -27,7 +27,7 @@ nakshatra <- function(jd,place){
   offsets = c(0.0,0.25,0.5,0.75,1.0)
   longitudes = c()
   for(i in 1:length(offsets)){
-    longitudes <- append(longitudes,((moon_longitude(rise + offsets[i]) - swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360))
+    longitudes <- append(longitudes,((moon_longitude(rise + offsets[i]) - swephR::swe_get_ayanamsa_ex_ut(rise,swephR::SE$FLG_SWIEPH + swephR::SE$FLG_NONUT)$daya) %% 360))
   }
   # 2. Today's nakshatra is when offset = 0
   # There are 27 Nakshatras spanning 360 degrees

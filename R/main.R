@@ -3,10 +3,9 @@
 # ---------------------------------------------------------------------------- #
 
 #Use Swiss ephemeris package for the calculations
-install.packages("swephR",repos = "https://CRAN.R-project.org/package=swephR")
 library(swephR)
 # Load the SE data set from Swiss Ephemeris
-data(SE)
+SE=swephR::SE
 # Used to print values with 22 significant digits
 options(digits = 22)
 
@@ -24,7 +23,7 @@ options(digits = 22)
 #' moon_longitude(2459778)
 #' moon_longitude(2459500)
 moon_longitude <- function(jd){
-  return (swe_calc_ut(jd, SE$MOON, SE$FLG_SWIEPH)$xx[1])
+  return (swephR::swe_calc_ut(jd, SE$MOON, SE$FLG_SWIEPH)$xx[1])
 }
 # ---------------------------------------------------------------------------- #
 
@@ -42,7 +41,7 @@ moon_longitude <- function(jd){
 #' sun_longitude(2459778)
 #' sun_longitude(2459500)
 sun_longitude <- function(jd){
-  return (swe_calc_ut(jd, SE$SUN, SE$FLG_SWIEPH)$xx[1])
+  return (swephR::swe_calc_ut(jd, SE$SUN, SE$FLG_SWIEPH)$xx[1])
 }
 # ---------------------------------------------------------------------------- #
 
@@ -156,7 +155,7 @@ inverse_lagrange <- function(x,y,ya){
 #' @examples
 #' gregorian_to_jd(18,7,2022)
 gregorian_to_jd <- function(day,month,year){
-  return (swe_julday(year, month, day, 0.0,SE$GREG_CAL))
+  return (swephR::swe_julday(year, month, day, 0.0,SE$GREG_CAL))
 }
 # ---------------------------------------------------------------------------- #
 
@@ -173,7 +172,7 @@ gregorian_to_jd <- function(day,month,year){
 #' @examples
 #' jd_to_gregorian(2459778)
 jd_to_gregorian <- function(jd){
-  return (swe_revjul(jd, SE$GREG_CAL))
+  return (swephR::swe_revjul(jd, SE$GREG_CAL))
 }
 # ---------------------------------------------------------------------------- #
 
@@ -194,7 +193,7 @@ sunrise <- function(jd,place){
   lat = place[1]
   lon = place[2]
   tz = place[3]
-  result <- swe_rise_trans_true_hor(jd - (tz/24.0),SE$SUN,"",SE$FLG_SWIEPH,SE$BIT_DISC_CENTER + SE$CALC_RISE,c(lon,lat,0),0,0,0)
+  result <- swephR::swe_rise_trans_true_hor(jd - (tz/24.0),SE$SUN,"",SE$FLG_SWIEPH,SE$BIT_DISC_CENTER + SE$CALC_RISE,c(lon,lat,0),0,0,0)
   rise <- result$tret
   return (c(rise + (tz)/24.0,to_dms((rise - jd) * 24 + tz)))
 }
@@ -216,7 +215,7 @@ sunset <- function(jd,place){
   lat = place[1]
   lon = place[2]
   tz = place[3]
-  result <- swe_rise_trans_true_hor(jd - (tz/24.0),SE$SUN,"",SE$FLG_SWIEPH,SE$BIT_DISC_CENTER + SE$CALC_SET,c(lon,lat,0),0,0,0)
+  result <- swephR::swe_rise_trans_true_hor(jd - (tz/24.0),SE$SUN,"",SE$FLG_SWIEPH,SE$BIT_DISC_CENTER + SE$CALC_SET,c(lon,lat,0),0,0,0)
   setting <- result$tret #Julian day number
   #Convert to the given timezone
   return (c(setting + (tz)/24,to_dms((setting - jd) * 24 + tz)))
@@ -240,7 +239,7 @@ moonrise <- function(jd,place){
   lat = place[1]
   lon = place[2]
   tz = place[3]
-  result <- swe_rise_trans_true_hor(jd - (tz/24.0),SE$MOON,"",SE$FLG_SWIEPH,SE$BIT_DISC_CENTER + SE$CALC_RISE,c(lon,lat,0),0,0,0)
+  result <- swephR::swe_rise_trans_true_hor(jd - (tz/24.0),SE$MOON,"",SE$FLG_SWIEPH,SE$BIT_DISC_CENTER + SE$CALC_RISE,c(lon,lat,0),0,0,0)
   rise <- result$tret #Julian day number
   #Convert to the given timezone
   return (to_dms((rise - jd) * 24 + tz))
@@ -264,7 +263,7 @@ moonset <- function(jd,place){
   lat = place[1]
   lon = place[2]
   tz = place[3]
-  result <- swe_rise_trans_true_hor(jd - (tz/24.0),SE$MOON,"",SE$FLG_SWIEPH,SE$BIT_DISC_CENTER + SE$CALC_SET,c(lon,lat,0),0,0,0)
+  result <- swephR::swe_rise_trans_true_hor(jd - (tz/24.0),SE$MOON,"",SE$FLG_SWIEPH,SE$BIT_DISC_CENTER + SE$CALC_SET,c(lon,lat,0),0,0,0)
   setting <- result$tret #Julian day number
   #Convert to the given timezone
   return (to_dms((setting - jd) * 24 + tz))
@@ -368,7 +367,7 @@ nakshatra <- function(jd,place){
   #Nakshatra as -> 1 = Ashwini, 2 = Bharani, ..., 27 = Revati
 
   #Set Lahiri ayanamsa
-  swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
+  swephR::swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
 
   # 1. Find time of sunrise
   lat = place[1]
@@ -380,7 +379,7 @@ nakshatra <- function(jd,place){
   offsets = c(0.0,0.25,0.5,0.75,1.0)
   longitudes = c()
   for(i in 1:length(offsets)){
-    longitudes <- append(longitudes,((moon_longitude(rise + offsets[i]) - swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360))
+    longitudes <- append(longitudes,((moon_longitude(rise + offsets[i]) - swephR::swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360))
   }
   # 2. Today's nakshatra is when offset = 0
   # There are 27 Nakshatras spanning 360 degrees
@@ -405,7 +404,7 @@ nakshatra <- function(jd,place){
 }
 # ---------------------------------------------------------------------------- #
 
-nakshatra(swe_julday(2022,6,30,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+nakshatra(swephR::swe_julday(2022,6,30,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
 
 # ---------------------------------------------------------------------------- #
 #' yoga
@@ -422,7 +421,7 @@ nakshatra(swe_julday(2022,6,30,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
 #' yoga(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
   yoga <- function(jd,place){
   #Yoga as -> 1 = Vishkambha, 2 = Priti, ..., 27 = Vaidhrti
-  swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
+  swephR::swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
 
   # 1. Find time of sunrise
   lat = place[1]
@@ -431,8 +430,8 @@ nakshatra(swe_julday(2022,6,30,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
   rise = sunrise(jd,place)[1]-(tz/24)
 
   # 2. Find the Nirayana longitudes and add them
-  lunar_long = (moon_longitude(rise) - swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
-  solar_long = (sun_longitude(rise) - swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  lunar_long = (moon_longitude(rise) - swephR::swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  solar_long = (sun_longitude(rise) - swephR::swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
   total = (lunar_long + solar_long) %% 360
 
   # There are 27 Yogas spanning 360 degrees
@@ -461,8 +460,8 @@ nakshatra(swe_julday(2022,6,30,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
   answer = c(as.integer(yog),to_dms(ends))
 
   # 5. Check for skipped yoga
-  lunar_long_tmrw = (moon_longitude(rise + 1) - swe_get_ayanamsa_ex_ut(rise + 1,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
-  solar_long_tmrw = (sun_longitude(rise + 1) - swe_get_ayanamsa_ex_ut(rise + 1,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  lunar_long_tmrw = (moon_longitude(rise + 1) - swephR::swe_get_ayanamsa_ex_ut(rise + 1,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  solar_long_tmrw = (sun_longitude(rise + 1) - swephR::swe_get_ayanamsa_ex_ut(rise + 1,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
   total_tmrw = (lunar_long_tmrw + solar_long_tmrw) %% 360
   tomorrow = ceiling(total_tmrw * 27 / 360)
   if(((tomorrow - yog) %% 27) > 1){
@@ -478,7 +477,7 @@ nakshatra(swe_julday(2022,6,30,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
 # ---------------------------------------------------------------------------- #
 
 
-yoga(swe_julday(2022,6,17,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+yoga(swephR::swe_julday(2022,6,17,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
 
 
 # ---------------------------------------------------------------------------- #
@@ -501,7 +500,7 @@ karana <- function(jd,place){
 }
 # ---------------------------------------------------------------------------- #
 
-karana(swe_julday(2022,7,14,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+karana(swephR::swe_julday(2022,7,14,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
 
 # ---------------------------------------------------------------------------- #
 #' vaara
@@ -531,9 +530,9 @@ vaara <- function(jd){
 #' lagna(2459778)
 #' lagna(gregorian_to_jd(30,8,2022))
 lagna <- function(jd){
-  swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
+  swephR::swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
   s = sun_longitude(jd)
-  solar_nirayana = (sun_longitude(jd) - swe_get_ayanamsa_ex_ut(jd,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  solar_nirayana = (sun_longitude(jd) - swephR::swe_get_ayanamsa_ex_ut(jd,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
   return (ceiling(solar_nirayana / 30))
 }
 # ---------------------------------------------------------------------------- #
@@ -551,9 +550,9 @@ lagna <- function(jd){
 #' rashi(2459778)
 #' rashi(gregorian_to_jd(30,8,2022))
 rashi <- function(jd){
-  swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
+  swephR::swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
   s = moon_longitude(jd)
-  lunar_nirayana = (moon_longitude(jd) - swe_get_ayanamsa_ex_ut(jd,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  lunar_nirayana = (moon_longitude(jd) - swephR::swe_get_ayanamsa_ex_ut(jd,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
   return (ceiling(lunar_nirayana / 30))
 }
 # ---------------------------------------------------------------------------- #
@@ -625,7 +624,7 @@ masa <- function(jd,place){
 }
 # ---------------------------------------------------------------------------- #
 
-masa(swe_julday(2022,6,17,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+masa(swephR::swe_julday(2022,6,17,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
 
 # ---------------------------------------------------------------------------- #
 #' ahargana
@@ -773,7 +772,7 @@ get_masa_name <- function(jd,place){
 }
 # ---------------------------------------------------------------------------- #
 
-get_masa_name(swe_julday(2022,7,29,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+get_masa_name(swephR::swe_julday(2022,7,29,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
 
 # ---------------------------------------------------------------------------- #
 #' get_tithi_name
@@ -941,7 +940,7 @@ get_vaara_name <- function(jd){
 # ---------------------------------------------------------------------------- #
 # ------------------------------- Tests -------------------------------------- #
 # ---------------------------------------------------------------------------- #
-jul21 <- swe_julday(2022,7,21,0,SE$GREG_CAL) #Julian day number
+jul21 <- swephR::swe_julday(2022,7,21,0,SE$GREG_CAL) #Julian day number
 gulbarga <- c(17.320486,76.839752,+5.5) #Place with lat, long and tz
 
 get_tithi_name(jul21,gulbarga)
