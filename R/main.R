@@ -4,10 +4,13 @@
 
 #Use Swiss ephemeris package for the calculations
 library(swephR)
-# Load the SE data set from Swiss Ephemeris
-SE=swephR::SE
 # Used to print values with 22 significant digits
 options(digits = 22)
+
+# ---------------------------------------------------------------------------- #
+#' swephR::SE
+#' @description Load the SE data set from Swiss Ephemeris
+SE <- swephR::SE
 
 
 # ---------------------------------------------------------------------------- #
@@ -117,7 +120,7 @@ unwrap_angles <- function(angles){
 #'
 #' @param x Vector x
 #' @param y Vector y
-#' @param ya
+#' @param ya Double ya
 #'
 #' @return Value of xa
 #'
@@ -935,26 +938,6 @@ get_vaara_name <- function(jd){
   return(varas[vaara(jd)])
 }
 # ---------------------------------------------------------------------------- #
-
-
-# ---------------------------------------------------------------------------- #
-# ------------------------------- Tests -------------------------------------- #
-# ---------------------------------------------------------------------------- #
-jul21 <- swephR::swe_julday(2022,7,21,0,SE$GREG_CAL) #Julian day number
-gulbarga <- c(17.320486,76.839752,+5.5) #Place with lat, long and tz
-
-get_tithi_name(jul21,gulbarga)
-get_nakshatra_name(jul21,gulbarga)
-get_yoga_name(jul21,gulbarga)
-get_karana_name(jul21,gulbarga)
-get_rashi_name(jul21)
-get_vaara_name(jul21)
-
-masas[masa(jul21,gulbarga)]
-ritus[ritu(masa(jul21,gulbarga))]
-
-samvatsars[samvatsara(jul21,masa(jul21,gulbarga))]
-
 
 # Can be verified from ->
 # https://www.drikpanchang.com/panchang/month-panchang.html?geoname-id=1270752&date=21/07/2022

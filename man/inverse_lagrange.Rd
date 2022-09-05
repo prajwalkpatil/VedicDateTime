@@ -13,7 +13,7 @@ inverse_lagrange(x, y, ya)
 
 \item{y}{Vector y}
 
-\item{ya}{}
+\item{ya}{Double ya}
 }
 \value{
 Value of xa
