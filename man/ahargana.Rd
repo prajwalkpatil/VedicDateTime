@@ -23,7 +23,7 @@ ahargana
 }
 \examples{
 ahargana(2459778)
-ahargana(swe_julday(2022,7,14,0,SE$GREG_CAL))
+ahargana(swephR::swe_julday(2022,7,14,0,swephR::SE$GREG_CAL))
 ahargana(2459778)
 ahargana(gregorian_to_jd(30,8,2022))
 }
