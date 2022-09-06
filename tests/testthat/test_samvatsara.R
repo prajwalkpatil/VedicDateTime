@@ -1,6 +1,7 @@
-source("~/dev/VedicDateTime/tests/testthat/vedic_class.R")
+
 library(testthat)
 library(VedicDateTime)
+source_test_helpers()
 
 masa_num <- masa(vd$jd, vd$place)
 
