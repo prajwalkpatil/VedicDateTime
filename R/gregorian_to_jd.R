@@ -12,6 +12,6 @@
 #' @examples
 #' gregorian_to_jd(18,7,2022)
 gregorian_to_jd <- function(day,month,year){
-  return (swe_julday(year, month, day, 0.0,SE$GREG_CAL))
+  return (swephR::swe_julday(year, month, day, 0.0,swephR::SE$GREG_CAL))
 }
 # ---------------------------------------------------------------------------- #

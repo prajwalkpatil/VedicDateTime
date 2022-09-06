@@ -11,6 +11,6 @@
 #' sun_longitude(2459778)
 #' sun_longitude(2459500)
 sun_longitude <- function(jd){
-  return (swe_calc_ut(jd, SE$SUN, SE$FLG_SWIEPH)$xx[1])
+  return (swephR::swe_calc_ut(jd, swephR::SE$SUN, swephR::SE$FLG_SWIEPH)$xx[1])
 }
 # ---------------------------------------------------------------------------- #

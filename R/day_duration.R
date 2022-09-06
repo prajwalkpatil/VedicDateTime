@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' day_duration(2459778,c(15.34, 75.13, +5.5))
-#' day_duration(swe_julday(2022,7,14,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+#' day_duration(swephR::swe_julday(2022,7,14,0,swephR::SE$GREG_CAL),c(15.34, 75.13, +5.5))
 day_duration <- function(jd,place){
   srise = sunrise(jd,place)[1]
   sset = sunrise(jd,place)[1]

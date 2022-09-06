@@ -1,5 +1,7 @@
 
-
+# ---------------------------------------------------------------------------- #
+#' masas
+#' @description Lunar month in the Vedic calendar system
 masas <- c(
   "Chaitra",
   "Vaishakha",
@@ -15,7 +17,9 @@ masas <- c(
   "Phalguna"
 )
 
-
+# ---------------------------------------------------------------------------- #
+#' tithis
+#' @description lunar day in the Vedic calendar system
 tithis <- c(
   "Shukla paksha prathama",
   "Shukla paksha dvitiya",
@@ -49,7 +53,9 @@ tithis <- c(
   "Amavasya"
 )
 
-
+# ---------------------------------------------------------------------------- #
+#' nakshatras
+#' @description Name of the 27 Nakshatras in Vedic calendar system
 nakshatras <- c(
   "Ashwini",
   "Bharani",
@@ -79,7 +85,9 @@ nakshatras <- c(
   "Uttarabhadrapada",
   "Revati"
 )
-
+# ---------------------------------------------------------------------------- #
+#' varas
+#' @description Name of the day of the week
 varas <- c(
   "Ravivara",
   "Somavara",
@@ -90,6 +98,9 @@ varas <- c(
   "Shanivara"
 )
 
+# ---------------------------------------------------------------------------- #
+#' ritus
+#' @description Name of the 6 seasons in Vedic calendar system
 ritus <- c(
   "Vasanta",
   "Grishma",
@@ -99,6 +110,9 @@ ritus <- c(
   "Sishira"
 )
 
+# ---------------------------------------------------------------------------- #
+#' samvatsars
+#' @description Name of the Year in Hindu Panchang
 samvatsars <- c(
   "Prabhava",
   "Vibhava",
@@ -162,6 +176,9 @@ samvatsars <- c(
   "Akshaya"
 )
 
+# ---------------------------------------------------------------------------- #
+#' yogas
+#' @description Name of the 27 yogas which is sum of sidereal longitudes of sun and moon in the multiples of 13° 20’
 yogas <- c(
   "Vishkhamba",
   "Preeti",
@@ -192,6 +209,9 @@ yogas <- c(
   "Vaidhriti"
 )
 
+# ---------------------------------------------------------------------------- #
+#' karanas
+#' @description Name of 60 Karanas which is when moon traverses 6° in longitude relative to the sun
 karanas <- c(
   "Kimstughna",
   "Bava",
@@ -255,6 +275,9 @@ karanas <- c(
   "Naga"
 )
 
+# ---------------------------------------------------------------------------- #
+#' rashis
+#' @description The name of 12 Rashis which represents the position of the moon on the zodiac at a given time
 rashis <- c(
   "Mesha",
   "Vrushabha",
@@ -270,6 +293,9 @@ rashis <- c(
   "Meena"
 )
 
+# ---------------------------------------------------------------------------- #
+#' vaaras
+#' @description Name of the day of the week
 vaaras <- c(
   "Ravivar",
   "Somvar",

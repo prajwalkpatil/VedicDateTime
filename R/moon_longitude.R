@@ -11,6 +11,6 @@
 #' moon_longitude(2459778)
 #' moon_longitude(2459500)
 moon_longitude <- function(jd){
-  return (swe_calc_ut(jd, SE$MOON, SE$FLG_SWIEPH)$xx[1])
+  return (swephR::swe_calc_ut(jd, swephR::SE$MOON, swephR::SE$FLG_SWIEPH)$xx[1])
 }
 # ---------------------------------------------------------------------------- #

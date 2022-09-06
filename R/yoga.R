@@ -13,7 +13,7 @@
 #' yoga(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
   yoga <- function(jd,place){
   #Yoga as -> 1 = Vishkambha, 2 = Priti, ..., 27 = Vaidhrti
-  swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
+  swephR::swe_set_sid_mode(swephR::SE$SIDM_LAHIRI,0,0)
 
   # 1. Find time of sunrise
   lat = place[1]
@@ -22,8 +22,8 @@
   rise = sunrise(jd,place)[1]-(tz/24)
 
   # 2. Find the Nirayana longitudes and add them
-  lunar_long = (moon_longitude(rise) - swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
-  solar_long = (sun_longitude(rise) - swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  lunar_long = (moon_longitude(rise) - swephR::swe_get_ayanamsa_ex_ut(rise,swephR::SE$FLG_SWIEPH + swephR::SE$FLG_NONUT)$daya) %% 360
+  solar_long = (sun_longitude(rise) - swephR::swe_get_ayanamsa_ex_ut(rise,swephR::SE$FLG_SWIEPH + swephR::SE$FLG_NONUT)$daya) %% 360
   total = (lunar_long + solar_long) %% 360
 
   # There are 27 Yogas spanning 360 degrees
@@ -52,8 +52,8 @@
   answer = c(as.integer(yog),to_dms(ends))
 
   # 5. Check for skipped yoga
-  lunar_long_tmrw = (moon_longitude(rise + 1) - swe_get_ayanamsa_ex_ut(rise + 1,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
-  solar_long_tmrw = (sun_longitude(rise + 1) - swe_get_ayanamsa_ex_ut(rise + 1,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  lunar_long_tmrw = (moon_longitude(rise + 1) - swephR::swe_get_ayanamsa_ex_ut(rise + 1,swephR::SE$FLG_SWIEPH + swephR::SE$FLG_NONUT)$daya) %% 360
+  solar_long_tmrw = (sun_longitude(rise + 1) - swephR::swe_get_ayanamsa_ex_ut(rise + 1,swephR::SE$FLG_SWIEPH + swephR::SE$FLG_NONUT)$daya) %% 360
   total_tmrw = (lunar_long_tmrw + solar_long_tmrw) %% 360
   tomorrow = ceiling(total_tmrw * 27 / 360)
   if(((tomorrow - yog) %% 27) > 1){

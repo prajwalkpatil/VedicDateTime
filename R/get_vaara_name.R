@@ -8,7 +8,7 @@
 #'
 #' @examples
 #' get_vaara_name(2459778)
-#' get_vaara_name(swe_julday(2022,7,14,0,SE$GREG_CAL))
+#' get_vaara_name(swephR::swe_julday(2022,7,14,0,swephR::SE$GREG_CAL))
 get_vaara_name <- function(jd){
   return(varas[vaara(jd)])
 }

@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' get_yoga_name(2459778,c(15.34, 75.13, +5.5))
-#' get_yoga_name(swe_julday(2022,7,14,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+#' get_yoga_name(swephR::swe_julday(2022,7,14,0,swephR::SE$GREG_CAL),c(15.34, 75.13, +5.5))
 get_yoga_name <- function(jd,place){
   yoga_ = yoga(jd,place)
   size = length(yoga_)
