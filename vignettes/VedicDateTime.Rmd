@@ -15,6 +15,10 @@ output:
     highlight: tango
   word_document:
     toc: yes
+vignette: >
+  %\VignetteIndexEntry{VedicDateTime: An R package to implement Vedic calendar system}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
 ```{r, include = FALSE}
@@ -28,7 +32,6 @@ knitr::opts_chunk$set(
 
 
 ```{r, include = FALSE}
-install.packages("swephR",repos = "https://CRAN.R-project.org/package=swephR")
 library(swephR)
 data(SE)
 options(digits = 5)
