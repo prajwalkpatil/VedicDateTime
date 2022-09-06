@@ -1,0 +1,833 @@
+---
+title: "VedicDateTime: An R package to implement Vedic calendar system"
+output:   
+  pdf_document:
+    toc: yes
+    highlight: arrow
+  html_document:
+    toc: yes
+    df_print: paged
+  rmdformats::readthedown:
+    self_contained: yes
+    thumbnails: yes
+    lightbox: yes
+    gallery: no
+    highlight: tango
+  word_document:
+    toc: yes
+vignette: >
+  %\VignetteIndexEntry{VedicDateTime: An R package to implement Vedic calendar system}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  tidy.opts = list(width.cutoff = 60), tidy = TRUE,
+  cache.rebuild = TRUE
+)
+```
+
+
+```{r, include = FALSE}
+library(swephR)
+data(SE)
+options(digits = 5)
+```
+
+\break
+
+# Introduction
+
+The whole concept of \textit{VedicDateTime} is based on the Hindu calendar system. The lunisolar Hindu calendar and its aspects are as old as \textit{Surya Siddhanta}, an ancient Sanskrit text on astronomy \footnote{Oak, N., \& Bhaty, R. (2019). Ancient updates to Surya-Siddhanta. Indiafacts.Org. Retrieved September 4, 2022, from \url{https://indiafacts.org/ancient-updates-to-surya-siddhanta/}}. Even today, this calendar is prevalent in India and it is mostly found in \textit{Hindu Panchanga} an Indian almanac that details information about the various festivals, rituals, and planetary combinations and has been in use since time immemorial in the Indian subcontinent. This Panchanga can be commonly found in most Indian homes\footnote{Charak, K. S. (2012). Elements of Vedic Astrology (2 Volume Set) (Third Edition). UMA Publications.}.
+
+The \textit{VedicDateTime} package aims to convert the commonly used Gregorian date-time to the Vedic date-time as per the calculations of the \textit{Panchang}. Panchanga which means 'five arms' consists of the five most important parts - \textit{Tithi, Vaara, Nakshatra, Yoga,} and \textit{Karana}. The \textit{Vaara} or the day of the week is based on Sun alone; \textit{Tithi} and \textit{Karana} are based upon Moon alone; \textit{Nakshatra} and \textit{Yoga} are based upon both Moon and Sun. This makes the Hindu calendar a true lunisolar calendar. \textit{VedicDateTime} contributes a new calendar system in R that can have huge potential to discover meaningful patterns in natural time series.
+
+Before we get into calendar systems, we need to be clear with the concept of \textit{Ayanamsha}. The Earth revolves anti-clockwise around the Sun in an elliptical orbit. The time taken by the earth to arrive at one vernal equinox from the other vernal equinox after one revolution is called as \textbf{tropical year}. At the end of the tropical year if we consider the position of the Earth with respect to a fixed star in the zodiac, the Earth appears to lie 50.26 seconds of celestial longitude to the west of its original position. In order to arrive at the same position with respect to a fixed star in the zodiac, the time taken is called as \textbf{sidereal year}. This is the result of precession of the Earth's axis due to its wobble in clockwise direction. The precession of the equinoxes increases by 50.2 seconds every year. The distance between the Vernal equinox and the 1st point of Aries (Mesha) on the fixed zodiac is progressively increasing. The distance at any given point of time is called as \textit{Ayanamsha}.
+
+We have two calendar systems-- \textbf{Sayana} and \textbf{Nirayana}. \textit{Sayana calendars}, also called as tropical calendars which means with \textit{Ayana}. \textit{Nirayana calendars}, also called as sidereal calendars which means without \textit{Ayana}. The \textit{Nirayana} values can be found out by subtracting the \textit{Ayanamsa} from the \textit{Sayana} values.
+
+Each aspect (function) of the package is explained below. Each and every detail concerning each function is mentioned there and then.
+
+```{r setup}
+library(VedicDateTime)
+```
+
+# Panchanga
+
+## Tithi
+
+\textbf{Tithi} can be called as a lunar day. When the moon traverses 12° in longitude relative to the sun, a tithi is completed. Fifteen tithis in the waxing phase (\textit{Shukla paksha}) with end tithi as full moon day (\textit{Purnima}) and other fifteen tithis in the waning phase (\textit{Krishna paksha}) with end tithi as new moon day (\textit{Amavasya}). These phases together constitute a lunar month which is of thirty tithis.
+
+Tithi doesn't require \textit{Ayanamsa} because it is the difference of longitudes and even if \textit{Ayanamsa} is subtracted from each longitude, it doesn't matter\footnote{Ramakumar, K. L. (2011). Panchangam calculations. \url{https://archive.org/details/PanchangamCalculations}}.
+
+\break
+### Calculation of Tithi
+
+```{r Tithi, width="50"}
+tithi<-function(jd,place){
+  # Tithi as -> 1 = Shukla paksha prathama, 2 = Shukla paksha dvitiya,...
+
+  tz = place[3] #Timezone of the place
+
+  #1. Find time of sunrise at a given place
+  rise = sunrise(jd,place)[1] - (tz/24)
+
+  #2. Find tithi on this Julian day number at a given place
+  moon_phase = lunar_phase(rise)
+  today = ceiling(moon_phase/12)
+  degrees_left = today * 12 - moon_phase
+
+  # 3. Compute longitudinal differences at intervals of 0.25 days from sunrise
+  offsets = c(0.25,0.5,0.75,1.0)
+  lunar_longitude_diff = c()
+  solar_longitude_diff = c()
+  relative_motion = c()
+  for(i in 1:length(offsets)){
+    lunar_longitude_diff <- append(lunar_longitude_diff,((moon_longitude(rise + offsets[i]) - moon_longitude(rise)) %% 360));
+    solar_longitude_diff <- append(solar_longitude_diff,((sun_longitude(rise + offsets[i]) - sun_longitude(rise)) %% 360));
+    relative_motion <- append(relative_motion,(lunar_longitude_diff[i]- solar_longitude_diff[i]))
+  }
+  # 4. Find end time by 4-point inverse Lagrange interpolation
+  y = relative_motion
+  x = offsets
+  # Compute fraction of day (after sunrise) needed to traverse 'degrees_left'
+  approx_end = inverse_lagrange(x,y,degrees_left)
+  ends = (rise + approx_end - jd) * 24 + tz
+  answer = c(as.integer(today),to_dms(ends))
+
+  # 5. Check for skipped tithi
+  moon_phase_tom = lunar_phase(rise + 1)
+  tomorrow = ceiling(moon_phase_tom/12)
+  if(((tomorrow-today) %% 30) > 1){
+    # interpolate again with same (x,y)
+    leap_tithi = today + 1
+    degrees_left = leap_tithi * 12 - moon_phase
+    approx_end = inverse_lagrange(x,y,degrees_left)
+    ends = (rise + approx_end - jd) * 24 + tz
+    answer <- append(answer,c(as.integer(leap_tithi),to_dms(ends)))
+  }
+  return (answer)
+}
+```
+
+
+
+At first, we take the \textbf{date} as Julian's day number and \textbf{place} as the latitude, longitude, and time zone of the place for which the calculations are to be made as parameters of the function. The \textbf{sunrise} for the given date and place is found using another function which uses the \textit{Swiss-ephemeris} to get the sunrise as a Julian day number. Tithi is found out during the sunrise as the difference between lunar and solar longitudes divided by 12. Tithi is generally obtained as a decimal number. The fractional part of the Tithi is used to find out the remaining degrees to the next Tithi which is used to find the time when that Tithi ends. The time taken to complete the remaining degrees is given by \textit{Inverse Lagrange’s interpolation} of the Tithis found by using the lunar and solar longitudes at the intervals of 0.25 days from sunrise. The obtained Tithi and its ending time are added to the output vector. Sometimes two Tithis can occur on a given date so, we check for skipped tithi by checking the Tithi of the next day and if a Tithi is skipped then, the skipped Tithi is included in the output with its ending time.
+
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+tithi(jd,place)
+```
+In the above output, the first number represents the number associated with the respective Tithi. 20 represents \textbf{Krishna paksha panchami}. This tithi ends at \textbf{20 hours 55 minutes and 35 seconds} which is represented by the rest of the numbers.
+
+
+```{r}
+tithi(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
+```
+In the above output, 6 numbers are returned out of which the first 3 numbers represent the Tithi name and ending time of the first Tithi and the next 3 numbers represent the Tithi name and ending time of the second Tithi. Here, on \textbf{17th June 2022}, two Tithis had occurred - 18 which represents \textbf{Krishna paksha trititya} ending at \textbf{6hrs 11mins and 26secs} and 19 which represents \textbf{Krishna paksha chaturthi} ending at \textbf{2hrs 59mins and 58secs} on the next day \textbf{18th June 2022}.
+
+The timings greater than 24:00 represents the time past midnight. The ending time of that Tithi in the next day can be obtained by subtracting 24 from the hours.
+
+### Tithi's name
+
+The Tithi number and ending date are obtained from the tithi function. The Tithi's name associated with each Tithi number is returned with its ending time by this function.
+
+The following are \textbf{30 Tithis} with their corresponding numbers -
+
+```{r echo=FALSE}
+for (i in 1:length(tithis)){
+  print(paste(i," - ",tithis[i]))
+}
+```
+
+Get name(s) of the Tithi for given Julian day number and place.
+
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5)  #Latitude, Longitude and timezone of the location
+get_tithi_name(jd,place)
+```
+
+```{r}
+get_tithi_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
+```
+
+## Vaara
+
+\textbf{Vaara} is the day of the week very similar to the Gregorian calendar.
+
+### Calculation of Vaara
+
+```{r}
+vaara <- function(jd){
+  return (as.integer(ceiling(jd + 1) %% 7) + 1)
+}
+```
+
+Vaara for a given Julian day number
+
+```{r}
+vaara(2459778)
+```
+
+```{r}
+vaara(gregorian_to_jd(6,8,2022))
+```
+
+### Vaara's name
+
+The following are \textbf{7 Vaaras} with their corresponding numbers -
+
+```{r echo=FALSE}
+vaaras <- c(
+  "Ravivar",
+  "Somvar",
+  "Mangalwar",
+  "Budhwar",
+  "Guruwar",
+  "Shukrawar",
+  "Shaniwar"
+)
+for (i in 1:length(vaaras)){
+  print(paste(i," - ",vaaras[i]))
+}
+```
+
+Get name of the Vaara for given Julian day number.
+
+```{r}
+get_vaara_name(2459778)
+```
+
+```{r}
+get_vaara_name(gregorian_to_jd(6,8,2022))
+```
+
+## Nakshatra
+
+The zodiac is divided into \textbf{27 Nakshatras}. The absolute longitude of the Moon is used to calculate the Nakshatra of the day. This requires \textbf{Ayanamsa} to be subtracted from the moon's tropical (\textit{Sayana}) longitude to get its sidereal (\textit{Nirayana}) longitude which can be used to find out the nakshatra.
+
+### Calculation of Nakshatra
+
+```{r}
+nakshatra <- function(jd,place){
+  #Nakshatra as -> 1 = Ashwini, 2 = Bharani, ..., 27 = Revati
+
+  #Set Lahiri ayanamsa
+  swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
+
+  # 1. Find time of sunrise
+  lat = place[1]
+  lon = place[2]
+  tz = place[3]
+  rise = sunrise(jd,place)[1]-(tz/24)
+
+  # Swiss Ephemeris always gives Sayana. So subtract ayanamsa to get Nirayana
+  offsets = c(0.0,0.25,0.5,0.75,1.0)
+  longitudes = c()
+  for(i in 1:length(offsets)){
+    longitudes <- append(longitudes,((moon_longitude(rise + offsets[i]) - swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360))
+  }
+  # 2. Today's nakshatra is when offset = 0
+  # There are 27 Nakshatras spanning 360 degrees
+  nak = ceiling(longitudes[1] * 27 / 360)
+
+  # 3. Find end time by 5-point inverse Lagrange interpolation
+  y = unwrap_angles(longitudes)
+  x = offsets
+  approx_end = inverse_lagrange(x,y,nak * 360/27)
+  ends = (rise - jd + approx_end) * 24 + tz
+  answer = c(as.integer(nak),to_dms(ends))
+
+  # 4. Check for skipped nakshatra
+  nak_tmrw = ceiling(longitudes[length(longitudes)-1] * 27 / 360)
+  if(((nak_tmrw - nak) %% 27) > 1){
+    leap_nak = nak + 1
+    approx_end = inverse_lagrange(offsets,longitudes,leap_nak*360/27)
+    ends = (rise - jd + approx_end) * 24 + tz
+    answer <- append(answer,c(as.integer(leap_nak),to_dms(ends)))
+  }
+  return (answer)
+}
+
+```
+
+The \textbf{Ayanamsa} which is obtained from the \textit{Swiss Ephemeris} and is set to \textit{Lahiri Ayanamsa}. \textbf{Date} as Julian's day number and the \textbf{place} as latitude, longitude, and time zone are passed as arguments of the function. The \textbf{sunrise} for the given date and place is found using the sunrise function which uses the \textit{Swiss Ephemeris} to get the sunrise as a Julian day number. The \textit{Nirayana longitude} of the \textbf{Moon} is obtained by subtracting the \textit{Ayanamsa} from its \textit{Sayana longitude}. The \textit{Nirayana longitude} of moon is multiplied by 27 and then divided by 360 to get Nakshatra as a decimal number. The ending time of this Nakshatra is obtained by checking for the starting time of the next Nakshatra using \textit{Lagrange’s inverse interpolation} of Nirayana lunar longitudes at 0.25 intervals of day. Nakshatra and its ending time are added to the output vector. Sometimes two Nakshatras can occur on a given date so, we check for skipped Nakshatra by checking the Nakshatra of the next day and if a Nakshatra is skipped then, the skipped Nakshatra is included in the output with its ending time.
+
+Nakshatra for given date and place.
+
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5)  #Latitude, Longitude and timezone of the location
+nakshatra(jd,place)
+```
+
+```{r}
+nakshatra(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
+```
+
+### Nakshatra's name
+
+The following are \textbf{27 Nakshatras} with their corresponding numbers -
+
+```{r echo=FALSE}
+for (i in 1:length(nakshatras)){
+  print(paste(i," - ",nakshatras[i]))
+}
+```
+
+Get name(s) of the Nakshatra for given Julian day number and place.
+
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5)  #Latitude, Longitude and timezone of the location
+get_nakshatra_name(jd,place)
+```
+
+```{r}
+get_nakshatra_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
+```
+
+## Yoga
+
+
+There are \textbf{27 Yogas}, each measure 13°20' of the arc. Yoga is the sum of sidereal (\textit{Nirayana}) longitudes of sun and moon in the multiples of 13° 20'. When the sidereal longitudes of sun and moon are added and they are divided by 13°20', the quotient plus one gives the number which denotes the respective Yoga.
+
+### Calculation of Yoga
+
+```{r}
+yoga <- function(jd,place){
+  #Yoga as -> 1 = Vishkambha, 2 = Priti, ..., 27 = Vaidhrti
+  swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
+
+  # 1. Find time of sunrise
+  lat = place[1]
+  lon = place[2]
+  tz = place[3]
+  rise = sunrise(jd,place)[1]-(tz/24)
+
+  # 2. Find the Nirayana longitudes and add them
+  lunar_long = (moon_longitude(rise) - swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  solar_long = (sun_longitude(rise) - swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  total = (lunar_long + solar_long) %% 360
+
+  # There are 27 Yogas spanning 360 degrees
+  yog = ceiling(total * 27 / 360)
+
+  # 3. Find how many longitudes is there left to be swept
+  degrees_left = yog * (360 / 27) - total
+
+  # 4. Compute longitudinal sums at intervals of 0.25 days from sunrise
+  offsets = c(0.25,0.5,0.75,1.0)
+  lunar_longitude_diff = c()
+  solar_longitude_diff = c()
+  total_motion = c()
+
+  for(i in 1:length(offsets)){
+    lunar_longitude_diff <- append(lunar_longitude_diff,((moon_longitude(rise + offsets[i]) - moon_longitude(rise)) %% 360))
+    solar_longitude_diff <- append(solar_longitude_diff,((sun_longitude(rise + offsets[i]) - sun_longitude(rise)) %% 360))
+    total_motion <- append(total_motion,(lunar_longitude_diff[i] + solar_longitude_diff[i]))
+  }
+  # 5. Find end time by 4-point inverse Lagrange interpolation
+  y = total_motion
+  x = offsets
+  # compute fraction of day (after sunrise) needed to traverse 'degrees_left'
+  approx_end = inverse_lagrange(x, y, degrees_left)
+  ends = (rise + approx_end - jd) * 24 + tz
+  answer = c(as.integer(yog),to_dms(ends))
+
+  # 5. Check for skipped yoga
+  lunar_long_tmrw = (moon_longitude(rise + 1) - swe_get_ayanamsa_ex_ut(rise + 1,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  solar_long_tmrw = (sun_longitude(rise + 1) - swe_get_ayanamsa_ex_ut(rise + 1,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  total_tmrw = (lunar_long_tmrw + solar_long_tmrw) %% 360
+  tomorrow = ceiling(total_tmrw * 27 / 360)
+  if(((tomorrow - yog) %% 27) > 1){
+    # interpolate again with same (x,y)
+    leap_yog = yog + 1
+    degrees_left = leap_yog * (360 / 27) - total
+    approx_end = inverse_lagrange(x, y, degrees_left)
+    ends = (rise + approx_end - jd) * 24 + tz
+    answer <- append(answer,c(as.integer(leap_yog),to_dms(ends)))
+  }
+  return (answer)
+}
+```
+
+The \textbf{Ayanamsa} which is obtained from the \textit{Swiss Ephemeris} and is set to \textit{Lahiri Ayanamsa}. \textbf{Date} as Julian's day number and the \textbf{place} as latitude, longitude, and time zone are passed as arguments of the function. The \textit{sunrise} for the given date and place is found using the sunrise function which uses the \textit{Swiss Ephemeris} to get the sunrise as a Julian day number. The \textit{Nirayana} longitudes of the sun and moon are obtained by subtracting \textit{Ayanamsa} from their \textit{Sayana longitudes}. The sum of \textit{Nirayana longitudes} of \textbf{Moon} and \textbf{Sun} is obtained and their mod 360 is performed so that the sum does not exceed 360. The resulting sum is multiplied by 27 and then divided by 360 to get Yoga as a decimal number. The fractional part of the Yoga is used to find out the remaining degrees to the next Yoga which is used to find the time when that Yoga ends. The time taken to complete the remaining degrees is given by \textit{Inverse Lagrange’s interpolation} of the Yoga found by using the lunar and solar longitudes at the intervals of 0.25 days from sunrise. The obtained Yoga and its ending time are added to the output vector. Sometimes two Yogas can occur on a given date so, we check for skipped Yoga  by checking the Yoga of the next day and if a Yoga is skipped then, the skipped Yoga is included in the output with its ending time.
+
+
+Yoga for given date and place.
+
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5)  #Latitude, Longitude and timezone of the location
+yoga(jd,place)
+```
+
+```{r}
+yoga(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
+```
+
+### Yoga's name
+
+The following are \textbf{27 Yogas} with their corresponding numbers -
+
+```{r echo=FALSE}
+for (i in 1:length(yogas)){
+  print(paste(i," - ",yogas[i]))
+}
+```
+
+Get name(s) of the Yoga for given Julian day number and place.
+
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+get_yoga_name(jd,place)
+```
+
+```{r}
+get_yoga_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
+```
+
+## Karana
+
+A \textbf{Karana} is half of a tithi or when the moon traverses 6° in longitude relative to the sun. In \textit{30 tithis} of a lunar month, there are 60 \textit{Karanas} or half-tithis.
+
+### Calculation of Karana
+
+```{r}
+karana <- function(jd,place){
+  tithi_ = tithi(jd,place)
+  answer <- c((tithi_[1] * 2) - 1,tithi_[1] * 2)
+  return(answer)
+}
+```
+
+To find out Karana for a given date and place where, \textbf{date} is given as a \textit{Julian day number} and \textbf{place} as latitude, longitude and time zone. Date and place are passed to the Tithi function which finds out the Tithi(s). This Tithis are used to output corresponding Karnas.
+
+
+An excerpt from \textit{Elements of Vedic Astrology by Dr. K. S. Charak}
+
+
+There are \textbf{4 Karanas} that occur \textbf{only once} in a lunar month. They are the fixed Karanas and called as:
+
+1.\textit{Shakuni}: assigned to the latter half of the 14th day of \textit{Krishna-paksha}.\
+2.\textit{Chatushpada}:  assigned  to  the  first  half  of  the  Amavasya  (15th  day  of \textit{Krishna-paksha}).\
+3.\textit{Naga}: assigned to the latter half of the \textit{Amavasya}.\
+4.\textit{Kimstughna}: assigned to the first half of the first day of the \textit{Shukla-paksha}.\
+
+
+The  remaining \textbf{seven  Karanas}  recur  \textbf{eight  times}  during  rest  of  the  lunar month. Their names are:
+
+
+1.   \textit{Bava} 
+2.   \textit{Balava}
+3.   \textit{Kanlava}
+4.   \textit{Taitila}
+5.   \textit{Gara}
+6.   \textit{Vanija}
+7.   \textit{Visht}
+
+These Karanas recur in regular order starting from the second half of the first day of \textit{Shukla-paksha} until the first half of the 14th day of the \textit{Krishna-paksha}.
+
+Karana for given date and place.
+
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+karana(jd,place)
+```
+
+```{r}
+karana(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
+```
+
+### Karana's name
+
+Get name(s) of the Karana for given Julian day number and place.
+
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+get_karana_name(jd,place)
+```
+
+```{r}
+get_karana_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
+```
+
+# Other functions
+
+## Rashi
+
+The zodiac is divided into 12 parts - Aries (\textit{Mesha}), Taurus (\textit{Vrishabha}), Gemini (\textit{Mithuna}), Cancer (\textit{Karka}), Leo (\textit{Simha}), Virgo (\textit{Kanya}), Libra (\textit{Tula}), Scorpio (\textit{Vruschika}), Sagittarius (\textit{Dhanu}), Capricorn (\textit{Makara}), Aquarius (\textit{Kumbha}), and Pisces (\textit{Meena}).
+
+\textbf{Rashi} (moon sign) represents the position of the moon on the zodiac at a given time.
+
+### Calculation of Rashi
+
+```{r}
+rashi <- function(jd){
+  swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
+  s = moon_longitude(jd)
+  lunar_nirayana = (moon_longitude(jd) - swe_get_ayanamsa_ex_ut(jd,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  return (ceiling(lunar_nirayana / 30))
+}
+```
+
+The \textit{Ayanamsa} is set to \textit{Lahiri ayanamsa} and the lunar longitude(tropical) is obtained for the given date which is taken as the Julian day number. The sidereal (\textit{Nirayana}) longitude of the moon is calculated by subtracting the Ayanamsa from the obtained tropical longitude then a mod of 360 is performed to ensure that it doesn’t exceed 360 and the result is divided by 30 to obtain Rashi as an integer.
+
+
+Rashi(Moon-sign) for a given Julian day number -
+
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+rashi(jd)
+```
+
+### Rashi's name
+
+The following are \textbf{Rashis} with their corresponding numbers -
+
+```{r echo=FALSE}
+for (i in 1:length(rashis)){
+  print(paste(i," - ",rashis[i]))
+}
+```
+
+Gives name of the Rashi(Sun-sign) for a given Julian day number
+
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+get_rashi_name(jd)
+```
+
+## Lagna
+
+\textbf{Lagna} (sun sign) represents the position of the sun on the zodiac at a given time.
+
+### Calculation of Lagna
+
+```{r}
+lagna <- function(jd){
+  swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
+  s = sun_longitude(jd)
+  solar_nirayana = (sun_longitude(jd) - swe_get_ayanamsa_ex_ut(jd,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
+  return (ceiling(solar_nirayana / 30))
+}
+```
+
+The \textit{Ayanamsa} is set to \textit{Lahiri ayanamsa} and the solar longitude(tropical) is obtained for the given date which is taken as the Julian day number. The sidereal (\textit{Nirayana}) longitude of the sun is calculated by subtracting the Ayanamsa from the obtained tropical longitude then a mod of 360 is performed to ensure that it doesn’t exceed 360 and the result is divided by 30 to obtain Lagna as an integer.
+
+
+Lagna(sun-sign) for a given Julian day number -
+
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+lagna(jd)
+```
+
+### Lagna's name
+
+Gives name of the lagna for a given Julian day number
+
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+get_lagna_name(jd)
+```
+
+
+## Masa
+
+\textbf{Masa} is the lunar month in the Vedic calendar system. The year as per the Hindu calendar starts from \textit{Chaitra masa} and ends at \textit{Phalguna masa}. Every masa has a fixed number of \textit{Tithis}. A Masa has  \textbf{2 Pakshas} (\textit{Krishna paksha} and \textit{Shukla paksha}) - \textbf{30 Tithis} in total.
+
+
+\textit{Chaitra Masa} doesn’t begin on the 1st January of the Gregorian calendar. It rather begins on \textit{Ugadi} (\textit{Gudi Padva} or Hindu new year) which starts when \textit{Amavasya Tithi} (New moon) of the \textit{Phalguna masa} ends.
+
+
+In one year, the number of Masas is not fixed as there can be 12 or 13 Masas in it. When the number of Tithis in a Masa is fixed, to compensate for the remaining days (Like in the Gregorian calendar which has 28-31 days in a month) an intercalary month is added every 32.5 months. This extra masa is called \textit{Adhika Masa}. It is usually referred by adding a suffix of its previous masa like – \textit{Adhika Jyeshtha masa}. It can occur between any two Masas but, it follows a regular interval of 32.5 months.
+
+
+As there is the lunar year with the extra month (\textit{Adhika masa}), so it there a lunar year with a diminished or reduced month, with only eleven months only is very rare indeed. It occurs once in 140 years or once in 190 years it is called \textit{Kshaya Masa} or Lost Month.
+
+### Calculation of Masa
+
+```{r}
+masa <- function(jd,place){
+  #Masa as -> 1 = Chaitra, 2 = Vaisakha, ..., 12 = Phalguna
+  ti = tithi(jd,place)[1]
+  critical = sunrise(jd,place)[1]
+  last_new_moon = new_moon(critical,ti,-1)
+  next_new_moon = new_moon(critical,ti,+1)
+  this_solar_month = lagna(last_new_moon)
+  next_solar_month = lagna(next_new_moon)
+  is_leap_month = (this_solar_month == next_solar_month)
+  maasa = this_solar_month + 1
+  if(maasa > 12){
+    maasa = maasa %% 12
+  }
+  return (c(as.integer(maasa),is_leap_month))
+}
+```
+
+At first, the \textit{Tithi} and sunrise of the given date and place is obtained then, the previous and next new moon is obtained from the given date and calculated \textit{tithi}. The sun sign(\textit{lagna}) for the previous and next new moon day is obtained. If these two sun-signs are same then the Masa is \textit{Adhika masa}. The masa number is one added to the sun sign of this month. Its mod 12 is returned so that it does not exceed 12.
+
+
+Masa for a given place and time.
+
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+masa(jd,place)
+```
+
+```{r}
+masa(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
+```
+
+### Masa's name
+
+The following are \textbf{Masas} with their corresponding numbers -
+
+```{r echo=FALSE}
+for (i in 1:length(masas)){
+  print(paste(i," - ",masas[i]))
+}
+```
+
+Get name of the Masa for given Julian day number and place.
+
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+get_masa_name(jd,place)
+```
+
+```{r}
+get_masa_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
+```
+
+## Ritu
+
+\textbf{Ritu} means \textbf{season}. There are 6 Ritus which represent the 6 seasons. The year starts from \textit{Vasanta ritu} which is the spring season and ends at \textit{Shishir Ritu} which is the winter season.
+
+The following are the Ritus , seasons they represent and their respective Masas - 
+
+1. Vasant -- Spring   (Chaitra and Vaishakha)
+2. Grishma -- Summer (Jyestha and Ashadha)
+3. Varsha -- Monsoon (Shravana and Bhadrapada)
+4. Sharad -- Autumn (Ashwin and Kartika)
+5. Hemant -- Prewinter (Margashira and Pushya)
+6. Shishir -- Winter (Magha and Phalguna)
+
+### Calculations of Ritu
+
+```{r}
+ritu <- function(masa_num){
+  return (((masa_num - 1) %/% 2) + 1)
+}
+```
+
+
+Returns the number associated with Ritu from a Masa.
+
+```{r}
+masa_num <- masa(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))[1]
+ritu(masa_num)
+```
+
+### Ritu's name
+
+The following are \textbf{Ritus} with their corresponding numbers -
+
+```{r echo=FALSE}
+for (i in 1:length(ritus)){
+  print(paste(i," - ",ritus[i]))
+}
+```
+
+Returns Ritu's name from a Masa.
+
+```{r}
+masa_num <- masa(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))[1]
+get_ritu_name(masa_num)
+```
+
+## Samvatsara
+
+\textbf{Samvatsara} means \textit{Year} in \textit{Sanskrit}. It is a cycle of 60 Samvatsaras in Hindu Panchang which is of 60 years. There are different types of Samvatsaras based on the point which is considered as their starting point. \textit{Saka Samvatsara}, the epoch of which corresponds to Julian year 78 and \textit{Vikram Samvatsara} which is ahead of \textit{Saka Samvatsara} by 135 years are some of the commonly used calendar systems.
+
+### Calculations of Samvatsara
+
+```{r}
+ahargana <- function(jd){
+  return (jd - 588465.5)
+}
+
+
+elapsed_year <- function(jd,maasa_num){
+  sidereal_year = 365.25636
+  ahar = ahargana(jd)
+  kali = as.integer((ahar + (4 - maasa_num) * 30) / sidereal_year)
+  saka = kali - 3179
+  vikrama = saka + 135
+  return (c(kali, saka, vikrama))
+}
+
+
+samvatsara <- function(jd,maasa_num){
+  kali = elapsed_year(jd,maasa_num)[1]
+  if(kali >= 4009){
+    kali = (kali - 14) %% 60
+  }
+  samvat = (kali + 27 + as.integer((kali * 211 - 108)/18000)) %% 60
+  return (samvat)
+}
+```
+
+
+Returns number associated with the name of the Shaka Samvatsar for a given Julian day number and maasa number.
+
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+
+#Number associated with the masa
+masa_num <- masa(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))[1] 
+
+samvatsara(jd,masa_num)
+```
+
+### Samvatsara's name
+
+The following are \textbf{Samvatsars} with their corresponding numbers -
+
+```{r echo=FALSE}
+for (i in 1:length(samvatsars)){
+  print(paste(i," - ",samvatsars[i]))
+}
+```
+
+Returns the name of the Shaka Samvatsar for a given Julian day number and maasa number.
+
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+
+#Number associated with the masa
+masa_num <- masa(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))[1]
+
+get_samvatsara_name(jd,masa_num)
+```
+
+
+# Intermediate functions
+
+The following functions use the functions of \textbf{SwephR - Swiss Ephemeris} to return results. 
+
+## Gregorian to JD
+
+Convert Gregorian date to Julian day number at 00:00 UTC
+
+```{r}
+gregorian_to_jd(17,6,2022) #In dd,mm,yyyy
+```
+
+## JD to Gregorian
+
+Convert Julian day number to Gregorian date
+
+```{r}
+jd_to_gregorian(2459778)
+```
+
+## Sun's Longitude
+
+Get Solar longitude for a given Julian day number.
+
+```{r}
+sun_longitude(2459778)
+```
+
+```{r}
+sun_longitude(gregorian_to_jd(17,6,2022))
+```
+
+## Moon's lonitude
+
+Get Lunar longitude for a given Julian day number.
+
+```{r}
+moon_longitude(2459778)
+```
+
+```{r}
+moon_longitude(gregorian_to_jd(17,6,2022))
+```
+
+## Sunrise
+
+Sunrise for a given date and place.
+
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+sunrise(jd,place)
+```
+
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+sunrise(jd,place)
+```
+
+## Sunset
+
+Sunset for a given date and place.
+
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+sunset(jd,place)
+```
+
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+sunset(jd,place)
+```
+
+## Moonrise
+
+Moonrise for a given date and place.
+
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+moonrise(jd,place)
+```
+
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+moonrise(jd,place)
+```
+
+## Moonset
+
+Moonset for a given date and place.
+
+```{r}
+jd <- 2459778 #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+moonset(jd,place)
+```
+
+```{r}
+jd <- gregorian_to_jd(17,6,2022) #Julian day number
+place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
+moonset(jd,place)
+```
