@@ -25,7 +25,7 @@ Get name(s) of the Tithi for given Julian day number and place.
 }
 \examples{
 get_tithi_name(2459778,c(15.34, 75.13, +5.5))
-get_tithi_name(swe_julday(2022,7,14,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+get_tithi_name(swephR::swe_julday(2022,7,14,0,swephR::SE$GREG_CAL),c(15.34, 75.13, +5.5))
 get_tithi_name(2459778,c(15.34, 75.13, +5.5))
 get_tithi_name(gregorian_to_jd(30,8,2022),c(15.34, 75.13, +5.5))
 }

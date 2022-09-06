@@ -25,7 +25,7 @@ Duration of the day for a given place and time
 }
 \examples{
 day_duration(2459778,c(15.34, 75.13, +5.5))
-day_duration(swe_julday(2022,7,14,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+day_duration(swephR::swe_julday(2022,7,14,0,swephR::SE$GREG_CAL),c(15.34, 75.13, +5.5))
 day_duration(2459778,c(15.34, 75.13, +5.5))
 day_duration(gregorian_to_jd(30,8,2022),c(15.34, 75.13, +5.5))
 }
