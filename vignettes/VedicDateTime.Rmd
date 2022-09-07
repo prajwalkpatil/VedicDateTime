@@ -41,7 +41,7 @@ options(digits = 5)
 
 # Introduction
 
-The whole concept of \textit{VedicDateTime} is based on the Hindu calendar system. The lunisolar Hindu calendar and its aspects are as old as \textit{Surya Siddhanta}, an ancient Sanskrit text on astronomy \footnote{Oak, N., \& Bhaty, R. (2019). Ancient updates to Surya-Siddhanta. Indiafacts.Org. Retrieved September 4, 2022, from \url{https://indiafacts.org/ancient-updates-to-surya-siddhanta/}}. Even today, this calendar is prevalent in India and it is mostly found in \textit{Hindu Panchanga} an Indian almanac that details information about the various festivals, rituals, and planetary combinations and has been in use since time immemorial in the Indian subcontinent. This Panchanga can be commonly found in most Indian homes\footnote{Charak, K. S. (2012). Elements of Vedic Astrology (2 Volume Set) (Third Edition). UMA Publications.}.
+The whole concept of \textit{VedicDateTime} is based on the Hindu calendar system. The lunisolar Hindu calendar and its aspects are as old as \textit{Surya Siddhanta}, an ancient Sanskrit text on astronomy \cite{nnoak} . Even today, this calendar is prevalent in India and it is mostly found in \textit{Hindu Panchanga} an Indian almanac that details information about the various festivals, rituals, and planetary combinations and has been in use since time immemorial in the Indian subcontinent. This Panchanga can be commonly found in most Indian homes \cite{kscharak}.
 
 The \textit{VedicDateTime} package aims to convert the commonly used Gregorian date-time to the Vedic date-time as per the calculations of the \textit{Panchang}. Panchanga which means 'five arms' consists of the five most important parts - \textit{Tithi, Vaara, Nakshatra, Yoga,} and \textit{Karana}. The \textit{Vaara} or the day of the week is based on Sun alone; \textit{Tithi} and \textit{Karana} are based upon Moon alone; \textit{Nakshatra} and \textit{Yoga} are based upon both Moon and Sun. This makes the Hindu calendar a true lunisolar calendar. \textit{VedicDateTime} contributes a new calendar system in R that can have huge potential to discover meaningful patterns in natural time series.
 
@@ -59,9 +59,13 @@ library(VedicDateTime)
 
 ## Tithi
 
+\begin{quotation}
+\textit{"The luminosity of the Moon is caused by light from the Sun. It is the varying relative positions of the Sun and the Moon that produce the phases of the Moon."} \cite{kscharak}
+\end{quotation}
+
 \textbf{Tithi} can be called as a lunar day. When the moon traverses 12° in longitude relative to the sun, a tithi is completed. Fifteen tithis in the waxing phase (\textit{Shukla paksha}) with end tithi as full moon day (\textit{Purnima}) and other fifteen tithis in the waning phase (\textit{Krishna paksha}) with end tithi as new moon day (\textit{Amavasya}). These phases together constitute a lunar month which is of thirty tithis.
 
-Tithi doesn't require \textit{Ayanamsa} because it is the difference of longitudes and even if \textit{Ayanamsa} is subtracted from each longitude, it doesn't matter\footnote{Ramakumar, K. L. (2011). Panchangam calculations. \url{https://archive.org/details/PanchangamCalculations}}.
+Tithi doesn't require \textit{Ayanamsa} because it is the difference of longitudes and even if \textit{Ayanamsa} is subtracted from each longitude, it doesn't matter \cite{ramakumar}.
 
 \break
 ### Calculation of Tithi
@@ -158,7 +162,10 @@ get_tithi_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 
 ## Vaara
 
-\textbf{Vaara} is the day of the week very similar to the Gregorian calendar.
+\textbf{Vaara} is the day of the week very similar to the Gregorian calendar. 
+\begin{quotation}
+\textit{"The seven days of the week have the seven Grahas from the Sun to Saturn as their lords."}  \cite{kscharak}
+\end{quotation}
 
 ### Calculation of Vaara
 
@@ -173,6 +180,7 @@ Vaara for a given Julian day number
 ```{r}
 vaara(2459778)
 ```
+The above output represents 1 - Ravivara. 
 
 ```{r}
 vaara(gregorian_to_jd(6,8,2022))
@@ -209,7 +217,13 @@ get_vaara_name(gregorian_to_jd(6,8,2022))
 
 ## Nakshatra
 
-The zodiac is divided into \textbf{27 Nakshatras}. The absolute longitude of the Moon is used to calculate the Nakshatra of the day. This requires \textbf{Ayanamsa} to be subtracted from the moon's tropical (\textit{Sayana}) longitude to get its sidereal (\textit{Nirayana}) longitude which can be used to find out the nakshatra.
+\begin{quotation}
+\textit{"Imagine a belt or a path in the sky, some 18 degrees of arc in width, running around the earth in an east-west direction. Groups of stars, to all appearance fixed, are studded along this imaginary belt. Twenty seven (or twenty eight!) such groups of stars are recognised in Vedic astrology. Because of lack of apparent motion, these are called as Nakshatras. This imaginary belt, with nakshatras studded on it, is called the zodiac.
+The zodiac forms the reference point for fixing up the position of any planet or star in the sky. Since it encircles the earth, it is comprised of 360 degrees. The twenty-seven nakshatras being evenly placed on it each have a span of 13°20' arc. The various nakshatras are numbered from one to twenty-seven."}  \cite{kscharak}
+
+\end{quotation}
+
+The absolute longitude of the Moon is used to calculate the Nakshatra of the day. This requires \textbf{Ayanamsa} to be subtracted from the moon's tropical (\textit{Sayana}) longitude to get its sidereal (\textit{Nirayana}) longitude which can be used to find out the nakshatra.
 
 ### Calculation of Nakshatra
 
@@ -265,10 +279,12 @@ jd <- 2459778 #Julian day number
 place <- c(15.34, 75.13, +5.5)  #Latitude, Longitude and timezone of the location
 nakshatra(jd,place)
 ```
+In the above output, the first number represents the number associated with the respective Nakshatra. 25 represents \textbf{Purvabhadrapada}. This Nakshatra ends on the next day at \textbf{0 hours 24 minutes and 1 second} which is represented by the rest of the numbers.
 
 ```{r}
 nakshatra(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 ```
+In the above output, the first number represents the number associated with the respective Nakshatra. 21 represents \textbf{Uttarashada}. This Nakshatra ends at \textbf{9 hours 56 minutes and 11 seconds} which is represented by the rest of the numbers.
 
 ### Nakshatra's name
 
@@ -296,6 +312,11 @@ get_nakshatra_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 
 
 There are \textbf{27 Yogas}, each measure 13°20' of the arc. Yoga is the sum of sidereal (\textit{Nirayana}) longitudes of sun and moon in the multiples of 13° 20'. When the sidereal longitudes of sun and moon are added and they are divided by 13°20', the quotient plus one gives the number which denotes the respective Yoga.
+\begin{quotation}
+From an Indian astrological perspective,
+
+\textit{"A yoga is a specific disposition of a planet or planets which is productive of specific results. There are hundreds, nay thousands, of yogas described in astrological texts. Their presence or absence in a horoscope, as also their strength and placement, determines the nature and stature of a native."}  \cite{kscharak}
+\end{quotation}
 
 ### Calculation of Yoga
 
@@ -367,10 +388,12 @@ jd <- 2459778 #Julian day number
 place <- c(15.34, 75.13, +5.5)  #Latitude, Longitude and timezone of the location
 yoga(jd,place)
 ```
+In the above output, the first number represents the number associated with the respective Yoga. 5 represents \textbf{Sobhana}. This Yoga ends on the next day at \textbf{3 hours 26 minutes and 12 seconds} which is represented by the rest of the numbers.
 
 ```{r}
 yoga(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 ```
+In the above output, the first number represents the number associated with the respective Yoga. 26 represents \textbf{Indra}. This Yoga ends at \textbf{17 hours 17 minutes and 57 seconds} which is represented by the rest of the numbers.
 
 ### Yoga's name
 
@@ -411,9 +434,6 @@ karana <- function(jd,place){
 To find out Karana for a given date and place where, \textbf{date} is given as a \textit{Julian day number} and \textbf{place} as latitude, longitude and time zone. Date and place are passed to the Tithi function which finds out the Tithi(s). This Tithis are used to output corresponding Karnas.
 
 
-An excerpt from \textit{Elements of Vedic Astrology by Dr. K. S. Charak}
-
-
 There are \textbf{4 Karanas} that occur \textbf{only once} in a lunar month. They are the fixed Karanas and called as:
 
 1.\textit{Shakuni}: assigned to the latter half of the 14th day of \textit{Krishna-paksha}.\
@@ -433,7 +453,7 @@ The  remaining \textbf{seven  Karanas}  recur  \textbf{eight  times}  during  re
 6.   \textit{Vanija}
 7.   \textit{Visht}
 
-These Karanas recur in regular order starting from the second half of the first day of \textit{Shukla-paksha} until the first half of the 14th day of the \textit{Krishna-paksha}.
+These Karanas recur in regular order starting from the second half of the first day of \textit{Shukla-paksha} until the first half of the 14th day of the \textit{Krishna-paksha}. \cite{kscharak}
 
 Karana for given date and place.
 
@@ -442,10 +462,12 @@ jd <- 2459778 #Julian day number
 place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
 karana(jd,place)
 ```
+The above pair of numbers represent these Karanas - "Kaulava-Taitila".
 
 ```{r}
 karana(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 ```
+The above pair of numbers represent these Karanas -  "Vanija-Visti".
 
 ### Karana's name
 
@@ -466,6 +488,12 @@ get_karana_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 ## Rashi
 
 The zodiac is divided into 12 parts - Aries (\textit{Mesha}), Taurus (\textit{Vrishabha}), Gemini (\textit{Mithuna}), Cancer (\textit{Karka}), Leo (\textit{Simha}), Virgo (\textit{Kanya}), Libra (\textit{Tula}), Scorpio (\textit{Vruschika}), Sagittarius (\textit{Dhanu}), Capricorn (\textit{Makara}), Aquarius (\textit{Kumbha}), and Pisces (\textit{Meena}).
+
+\begin{quotation}
+
+\textit{"When the zodiac is divided into twelve equal parts, each such part has an extension of 30 degrees of the arc. Such a division is called a Sign or Rashi. A sign consists of two and a quarter nakshatras. A particular group of stars in the zodiac is considered as the starting point of the zodiac. From this point, the twenty-seven nakshatras or the twelve signs begin. A planet located anywhere along the zodiac may be considered as located in a particular sign, depending upon which twelfth division of the zodiac it is in; it may be considered as being located in a particular nakshatra too, depending upon which twenty seventh division of the zodiac it is in."}  \cite{kscharak}
+
+\end{quotation}
 
 \textbf{Rashi} (moon sign) represents the position of the moon on the zodiac at a given time.
 
@@ -510,6 +538,11 @@ get_rashi_name(jd)
 ## Lagna
 
 \textbf{Lagna} (sun sign) represents the position of the sun on the zodiac at a given time.
+\begin{quotation}
+From an Indian astronomical perspective,
+
+\textit{"The twelve houses of a horoscope deal with all conceivable aspects of life. The most important of all houses is the lagna or the first house. The remaining houses are basically related to the first house only. The planets in the horoscopic chart are subservient to the lagna, and their original nature undergoes modifications depending upon the lagna."}  \cite{kscharak}
+\end{quotation}
 
 ### Calculation of Lagna
 
@@ -831,3 +864,16 @@ jd <- gregorian_to_jd(17,6,2022) #Julian day number
 place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
 moonset(jd,place)
 ```
+
+
+\begin{thebibliography}{999}
+
+\bibitem{nnoak} Oak, N., \& Bhaty, R. (2019). \textbf{Ancient updates to Surya-Siddhanta}. Indiafacts.Org. Retrieved September 4, 2022, from \url{https://indiafacts.org/ancient-updates-to-surya-siddhanta/}
+
+\bibitem{ramakumar} Ramakumar, K. L. (2011). \textbf{Panchangam calculations}. \url{https://archive.org/details/PanchangamCalculations}
+
+\bibitem{kscharak} Charak, K. S. (2012). \textbf{Elements of Vedic Astrology} (2 Volume Set) (Third Edition). UMA Publications.
+
+\bibitem{satishbd} \textbf{drik-panchanga} by \textbf{Satish BD} on GitHub - \url{https://github.com/webresh/drik-panchanga}
+
+\end{thebibliography}
