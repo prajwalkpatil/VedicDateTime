@@ -4,13 +4,15 @@
 
 An R Package to work with Vedic Calendar System.
 
+@maintainer: [@neerajdhanraj](https://github.com/neerajdhanraj)
+
 ## Build
 
 - Clone the repository from Github
 - `devtools::build()`
 - `devtools::install()`
 
-## Testing
+## Test
 
 To run the test cases
 `devtools::test()`
