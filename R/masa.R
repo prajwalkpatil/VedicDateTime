@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' masa(2459778,c(15.34, 75.13, +5.5))
-#' masa(swe_julday(2022,7,14,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+#' masa(swephR::swe_julday(2022,7,14,0,swephR::SE$GREG_CAL),c(15.34, 75.13, +5.5))
 masa <- function(jd,place){
   #Masa as -> 1 = Chaitra, 2 = Vaisakha, ..., 12 = Phalguna
   ti = tithi(jd,place)[1]

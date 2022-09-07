@@ -10,6 +10,6 @@
 #' @examples
 #' jd_to_gregorian(2459778)
 jd_to_gregorian <- function(jd){
-  return (swe_revjul(jd, SE$GREG_CAL))
+  return (swephR::swe_revjul(jd, swephR::SE$GREG_CAL))
 }
 # ---------------------------------------------------------------------------- #

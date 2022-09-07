@@ -13,7 +13,7 @@ sunset <- function(jd,place){
   lat = place[1]
   lon = place[2]
   tz = place[3]
-  result <- swe_rise_trans_true_hor(jd - (tz/24.0),SE$SUN,"",SE$FLG_SWIEPH,SE$BIT_DISC_CENTER + SE$CALC_SET,c(lon,lat,0),0,0,0)
+  result <- swephR::swe_rise_trans_true_hor(jd - (tz/24.0),swephR::SE$SUN,"",swephR::SE$FLG_SWIEPH,swephR::SE$BIT_DISC_CENTER + swephR::SE$CALC_SET,c(lon,lat,0),0,0,0)
   setting <- result$tret #Julian day number
   #Convert to the given timezone
   return (c(setting + (tz)/24,to_dms((setting - jd) * 24 + tz)))

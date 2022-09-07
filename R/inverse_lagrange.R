@@ -5,7 +5,7 @@
 #'
 #' @param x Vector x
 #' @param y Vector y
-#' @param ya
+#' @param ya Double ya
 #'
 #' @return Value of xa
 #'

@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' get_masa_name(2459778,c(15.34, 75.13, +5.5))
-#' get_masa_name(swe_julday(2022,7,14,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+#' get_masa_name(swephR::swe_julday(2022,7,14,0,swephR::SE$GREG_CAL),c(15.34, 75.13, +5.5))
 get_masa_name <- function(jd,place){
   masa_ = masa(jd,place)
   masa_name = ""

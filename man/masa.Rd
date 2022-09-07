@@ -27,5 +27,5 @@ Masa for a given place and time
 masa(2459778,c(15.34, 75.13, +5.5))
 masa(gregorian_to_jd(30,8,2022),c(15.34, 75.13, +5.5))
 masa(2459778,c(15.34, 75.13, +5.5))
-masa(swe_julday(2022,7,14,0,SE$GREG_CAL),c(15.34, 75.13, +5.5))
+masa(swephR::swe_julday(2022,7,14,0,swephR::SE$GREG_CAL),c(15.34, 75.13, +5.5))
 }
