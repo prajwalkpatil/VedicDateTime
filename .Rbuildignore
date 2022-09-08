@@ -5,3 +5,4 @@
 ^\tests$
 ^doc$
 ^Meta$
+^.dccache
