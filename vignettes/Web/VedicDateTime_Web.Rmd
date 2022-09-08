@@ -46,9 +46,9 @@ options(digits = 5)
 
 # Introduction
 
-The whole concept of <em>VedicDateTime</em> is based on the Hindu calendar system. The lunisolar Hindu calendar and its aspects are as old as <em>Surya Siddhanta</em>, an ancient Sanskrit text on astronomy <sup><a href = "#1">[1]</a></sup> . Even today, this calendar is prevalent in India and it is mostly found in <em>Hindu Panchanga</em> an Indian almanac that details information about the various festivals, rituals, and planetary combinations and has been in use since time immemorial in the Indian subcontinent. This Panchanga can be commonly found in most Indian homes <sup><a href = "#3">[3]</a></sup>.
+The whole concept of <em>VedicDateTime</em> is based on the Hindu calendar system. The lunisolar Hindu calendar and its aspects are as old as <em>Surya Siddhanta</em>, an ancient Sanskrit text on astronomy <sup><a href = "#1">[1]</a></sup> . Even today, this calendar is prevalent in India and it is mostly found in <em>Hindu Panchanga</em> an Indian almanac that details information about the various festivals, rituals, and planetary combinations and has been in use since time immemorial in the Indian subcontinent. This Panchanga can be commonly found in most Indian homes <sup><a href = "#4">[4]</a></sup>.
 
-The <em>VedicDateTime</em> package aims to convert the commonly used Gregorian date-time to the Vedic date-time as per the calculations of the <em>Panchang</em>. Panchanga which means 'five arms' consists of the five most important parts - <em>Tithi, Vaara, Nakshatra, Yoga,</em> and <em>Karana</em>. The <em>Vaara</em> or the day of the week is based on Sun alone; <em>Tithi</em> and <em>Karana</em> are based upon Moon alone; <em>Nakshatra</em> and <em>Yoga</em> are based upon both Moon and Sun. This makes the Hindu calendar a true lunisolar calendar. <em>VedicDateTime</em> contributes a new calendar system in R that can have huge potential to discover meaningful patterns in natural time series.
+The <em>VedicDateTime</em> package aims to convert the commonly used Gregorian date-time to the Vedic date-time as per the calculations of the <em>Panchang</em>. Panchanga which means 'five arms' consists of the five most important parts - <em>Tithi, Vaara, Nakshatra, Yoga,</em> and <em>Karana</em>. The <em>Vaara</em> or the day of the week is based on Sun alone; <em>Tithi</em> and <em>Karana</em> are based upon Moon alone; <em>Nakshatra</em> and <em>Yoga</em> are based upon both Moon and Sun. This makes the Hindu calendar a true lunisolar calendar. <em>VedicDateTime</em> contributes a new calendar system in R that can have huge potential to discover meaningful patterns in natural time series<sup><a href = "#2">[2]</a></sup>.
 
 Before we get into calendar systems, we need to be clear with the concept of <em>Ayanamsha</em>. The Earth revolves anti-clockwise around the Sun in an elliptical orbit. The time taken by the earth to arrive at one vernal equinox from the other vernal equinox after one revolution is called as <strong>tropical year</strong>. At the end of the tropical year if we consider the position of the Earth with respect to a fixed star in the zodiac, the Earth appears to lie 50.26 seconds of celestial longitude to the west of its original position. In order to arrive at the same position with respect to a fixed star in the zodiac, the time taken is called as <strong>sidereal year</strong>. This is the result of precession of the Earth's axis due to its wobble in clockwise direction. The precession of the equinoxes increases by 50.2 seconds every year. The distance between the Vernal equinox and the 1st point of Aries (Mesha) on the fixed zodiac is progressively increasing. The distance at any given point of time is called as <em>Ayanamsha</em>.
 
@@ -65,12 +65,12 @@ library(VedicDateTime)
 ## Tithi
 
  
-<em>"The luminosity of the Moon is caused by light from the Sun. It is the varying relative positions of the Sun and the Moon that produce the phases of the Moon."</em> <sup><a href = "#3">[3]</a></sup>
+<em>"The luminosity of the Moon is caused by light from the Sun. It is the varying relative positions of the Sun and the Moon that produce the phases of the Moon."</em> <sup><a href = "#4">[4]</a></sup>
  
 
 <strong>Tithi</strong> can be called as a lunar day. When the moon traverses 12° in longitude relative to the sun, a tithi is completed. Fifteen tithis in the waxing phase (<em>Shukla paksha</em>) with end tithi as full moon day (<em>Purnima</em>) and other fifteen tithis in the waning phase (<em>Krishna paksha</em>) with end tithi as new moon day (<em>Amavasya</em>). These phases together constitute a lunar month which is of thirty tithis.
 
-Tithi doesn't require <em>Ayanamsa</em> because it is the difference of longitudes and even if <em>Ayanamsa</em> is subtracted from each longitude, it doesn't matter <sup><a href = "#2">[2]</a></sup>.
+Tithi doesn't require <em>Ayanamsa</em> because it is the difference of longitudes and even if <em>Ayanamsa</em> is subtracted from each longitude, it doesn't matter <sup><a href = "#3">[3]</a></sup>.
 
 \break
 ### Calculation of Tithi
@@ -169,7 +169,7 @@ get_tithi_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 
 <strong>Vaara</strong> is the day of the week very similar to the Gregorian calendar. 
  
-<em>"The seven days of the week have the seven Grahas from the Sun to Saturn as their lords."</em>  <sup><a href = "#3">[3]</a></sup>
+<em>"The seven days of the week have the seven Grahas from the Sun to Saturn as their lords."</em>  <sup><a href = "#4">[4]</a></sup>
  
 
 ### Calculation of Vaara
@@ -224,7 +224,7 @@ get_vaara_name(gregorian_to_jd(6,8,2022))
 
  
 <em>"Imagine a belt or a path in the sky, some 18 degrees of arc in width, running around the earth in an east-west direction. Groups of stars, to all appearance fixed, are studded along this imaginary belt. Twenty seven (or twenty eight!) such groups of stars are recognised in Vedic astrology. Because of lack of apparent motion, these are called as Nakshatras. This imaginary belt, with nakshatras studded on it, is called the zodiac.
-The zodiac forms the reference point for fixing up the position of any planet or star in the sky. Since it encircles the earth, it is comprised of 360 degrees. The twenty-seven nakshatras being evenly placed on it each have a span of 13°20' arc. The various nakshatras are numbered from one to twenty-seven."</em>  <sup><a href = "#3">[3]</a></sup>
+The zodiac forms the reference point for fixing up the position of any planet or star in the sky. Since it encircles the earth, it is comprised of 360 degrees. The twenty-seven nakshatras being evenly placed on it each have a span of 13°20' arc. The various nakshatras are numbered from one to twenty-seven."</em>  <sup><a href = "#4">[4]</a></sup>
 
  
 
@@ -320,7 +320,7 @@ There are <strong>27 Yogas</strong>, each measure 13°20' of the arc. Yoga is th
  
 From an Indian astrological perspective,
 
-<em>"A yoga is a specific disposition of a planet or planets which is productive of specific results. There are hundreds, nay thousands, of yogas described in astrological texts. Their presence or absence in a horoscope, as also their strength and placement, determines the nature and stature of a native."</em> <sup><a href = "#3">[3]</a></sup>
+<em>"A yoga is a specific disposition of a planet or planets which is productive of specific results. There are hundreds, nay thousands, of yogas described in astrological texts. Their presence or absence in a horoscope, as also their strength and placement, determines the nature and stature of a native."</em> <sup><a href = "#4">[4]</a></sup>
  
 
 ### Calculation of Yoga
@@ -458,7 +458,7 @@ The  remaining <strong>seven  Karanas</strong>  recur  <strong>eight  times</str
 6.   <em>Vanija</em>
 7.   <em>Visht</em>
 
-These Karanas recur in regular order starting from the second half of the first day of <em>Shukla-paksha</em> until the first half of the 14th day of the <em>Krishna-paksha</em>. <sup><a href = "#3">[3]</a></sup>
+These Karanas recur in regular order starting from the second half of the first day of <em>Shukla-paksha</em> until the first half of the 14th day of the <em>Krishna-paksha</em>. <sup><a href = "#4">[4]</a></sup>
 
 Karana for given date and place.
 
@@ -496,7 +496,7 @@ The zodiac is divided into 12 parts - Aries (<em>Mesha</em>), Taurus (<em>Vrisha
 
  
 
-<em>"When the zodiac is divided into twelve equal parts, each such part has an extension of 30 degrees of the arc. Such a division is called a Sign or Rashi. A sign consists of two and a quarter nakshatras. A particular group of stars in the zodiac is considered as the starting point of the zodiac. From this point, the twenty-seven nakshatras or the twelve signs begin. A planet located anywhere along the zodiac may be considered as located in a particular sign, depending upon which twelfth division of the zodiac it is in; it may be considered as being located in a particular nakshatra too, depending upon which twenty seventh division of the zodiac it is in."</em>  <sup><a href = "#3">[3]</a></sup>
+<em>"When the zodiac is divided into twelve equal parts, each such part has an extension of 30 degrees of the arc. Such a division is called a Sign or Rashi. A sign consists of two and a quarter nakshatras. A particular group of stars in the zodiac is considered as the starting point of the zodiac. From this point, the twenty-seven nakshatras or the twelve signs begin. A planet located anywhere along the zodiac may be considered as located in a particular sign, depending upon which twelfth division of the zodiac it is in; it may be considered as being located in a particular nakshatra too, depending upon which twenty seventh division of the zodiac it is in."</em>  <sup><a href = "#4">[4]</a></sup>
 
  
 
@@ -546,7 +546,7 @@ get_rashi_name(jd)
  
 From an Indian astronomical perspective,
 
-<em>"The twelve houses of a horoscope deal with all conceivable aspects of life. The most important of all houses is the lagna or the first house. The remaining houses are basically related to the first house only. The planets in the horoscopic chart are subservient to the lagna, and their original nature undergoes modifications depending upon the lagna."</em>  <sup><a href = "#3">[3]</a></sup>
+<em>"The twelve houses of a horoscope deal with all conceivable aspects of life. The most important of all houses is the lagna or the first house. The remaining houses are basically related to the first house only. The planets in the horoscopic chart are subservient to the lagna, and their original nature undergoes modifications depending upon the lagna."</em>  <sup><a href = "#4">[4]</a></sup>
  
 
 ### Calculation of Lagna
@@ -874,9 +874,11 @@ moonset(jd,place)
 
 <a id = "1">[1]</a> Oak, N., Bhaty, R. (2019). <strong>Ancient updates to Surya-Siddhanta</strong>. Indiafacts.Org. Retrieved September 4, 2022, from https://indiafacts.org/ancient-updates-to-surya-siddhanta/
 
-<a id = "2">[2]</a> Ramakumar, K. L. (2011). <strong>Panchangam calculations</strong>. https://archive.org/details/PanchangamCalculations}
+<a id = "2">[2]</a> Bokde, N. D. (2021, October 22). <strong>Natural Time-Series Analysis and Vedic Hindu Calendar System</strong>. arXiv.org. Retrieved September 8, 2022, from https://arxiv.org/abs/2111.03441
 
-<a id = "3">[3]</a> Charak, K. S. (2012). <strong>Elements of Vedic Astrology</strong> (2 Volume Set) (Third Edition). UMA Publications.
+<a id = "3">[3]</a> Ramakumar, K. L. (2011). <strong>Panchangam calculations</strong>. https://archive.org/details/PanchangamCalculations
 
-<a id = "4">[4]</a> <strong>drik-panchanga</strong> by <strong>Satish BD</strong> on GitHub - https://github.com/webresh/drik-panchanga
+<a id = "4">[4]</a> Charak, K. S. (2012). <strong>Elements of Vedic Astrology</strong> (2 Volume Set) (Third Edition). UMA Publications.
+
+<a id = "5">[5]</a> <strong>drik-panchanga</strong> by <strong>Satish BD</strong> on GitHub - https://github.com/webresh/drik-panchanga
 

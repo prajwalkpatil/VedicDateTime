@@ -48,7 +48,7 @@ options(digits = 5)
 
 The whole concept of \textit{VedicDateTime} is based on the Hindu calendar system. The lunisolar Hindu calendar and its aspects are as old as \textit{Surya Siddhanta}, an ancient Sanskrit text on astronomy \cite{nnoak} . Even today, this calendar is prevalent in India and it is mostly found in \textit{Hindu Panchanga} an Indian almanac that details information about the various festivals, rituals, and planetary combinations and has been in use since time immemorial in the Indian subcontinent. This Panchanga can be commonly found in most Indian homes \cite{kscharak}.
 
-The \textit{VedicDateTime} package aims to convert the commonly used Gregorian date-time to the Vedic date-time as per the calculations of the \textit{Panchang}. Panchanga which means 'five arms' consists of the five most important parts - \textit{Tithi, Vaara, Nakshatra, Yoga,} and \textit{Karana}. The \textit{Vaara} or the day of the week is based on Sun alone; \textit{Tithi} and \textit{Karana} are based upon Moon alone; \textit{Nakshatra} and \textit{Yoga} are based upon both Moon and Sun. This makes the Hindu calendar a true lunisolar calendar. \textit{VedicDateTime} contributes a new calendar system in R that can have huge potential to discover meaningful patterns in natural time series.
+The \textit{VedicDateTime} package aims to convert the commonly used Gregorian date-time to the Vedic date-time as per the calculations of the \textit{Panchang}. Panchanga which means 'five arms' consists of the five most important parts - \textit{Tithi, Vaara, Nakshatra, Yoga,} and \textit{Karana}. The \textit{Vaara} or the day of the week is based on Sun alone; \textit{Tithi} and \textit{Karana} are based upon Moon alone; \textit{Nakshatra} and \textit{Yoga} are based upon both Moon and Sun. This makes the Hindu calendar a true lunisolar calendar. \textit{VedicDateTime} contributes a new calendar system in R that can have huge potential to discover meaningful patterns in natural time series.\cite{neeraj}
 
 Before we get into calendar systems, we need to be clear with the concept of \textit{Ayanamsha}. The Earth revolves anti-clockwise around the Sun in an elliptical orbit. The time taken by the earth to arrive at one vernal equinox from the other vernal equinox after one revolution is called as \textbf{tropical year}. At the end of the tropical year if we consider the position of the Earth with respect to a fixed star in the zodiac, the Earth appears to lie 50.26 seconds of celestial longitude to the west of its original position. In order to arrive at the same position with respect to a fixed star in the zodiac, the time taken is called as \textbf{sidereal year}. This is the result of precession of the Earth's axis due to its wobble in clockwise direction. The precession of the equinoxes increases by 50.2 seconds every year. The distance between the Vernal equinox and the 1st point of Aries (Mesha) on the fixed zodiac is progressively increasing. The distance at any given point of time is called as \textit{Ayanamsha}.
 
@@ -873,7 +873,9 @@ moonset(jd,place)
 
 \begin{thebibliography}{999}
 
-\bibitem{nnoak} Oak, N., \& Bhaty, R. (2019). \textbf{Ancient updates to Surya-Siddhanta}. Indiafacts.Org. Retrieved September 4, 2022, from \url{https://indiafacts.org/ancient-updates-to-surya-siddhanta/}
+\bibitem{nnoak} Oak, N., \& Bhaty, R. (2019). \textbf{Ancient updates to Surya-Siddhanta}. Indiafacts.Org. Retrieved September 4, 2022, from \url{https://indiafacts.org/ancient-updates-to-surya-siddhanta/}\\
+
+\bibitem{neeraj} Bokde, N. D. (2021, October 22). \textbf{Natural Time-Series Analysis and Vedic Hindu Calendar System}. arXiv.org. Retrieved September 8, 2022, from \url{https://arxiv.org/abs/2111.03441}
 
 \bibitem{ramakumar} Ramakumar, K. L. (2011). \textbf{Panchangam calculations}. \url{https://archive.org/details/PanchangamCalculations}
 
