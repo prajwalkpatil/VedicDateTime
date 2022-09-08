@@ -41,13 +41,13 @@ options(digits = 5)
 
 # Introduction
 
-The whole concept of <em>VedicDateTime} is based on the Hindu calendar system. The lunisolar Hindu calendar and its aspects are as old as <em>Surya Siddhanta}, an ancient Sanskrit text on astronomy [1]. Even today, this calendar is prevalent in India and it is mostly found in <em>Hindu Panchanga} an Indian almanac that details information about the various festivals, rituals, and planetary combinations and has been in use since time immemorial in the Indian subcontinent. This Panchanga can be commonly found in most Indian homes \cite{kscharak}.
+The whole concept of \textit{VedicDateTime} is based on the Hindu calendar system. The lunisolar Hindu calendar and its aspects are as old as \textit{Surya Siddhanta}, an ancient Sanskrit text on astronomy \cite{nnoak} . Even today, this calendar is prevalent in India and it is mostly found in \textit{Hindu Panchanga} an Indian almanac that details information about the various festivals, rituals, and planetary combinations and has been in use since time immemorial in the Indian subcontinent. This Panchanga can be commonly found in most Indian homes \cite{kscharak}.
 
-The <em>VedicDateTime} package aims to convert the commonly used Gregorian date-time to the Vedic date-time as per the calculations of the <em>Panchang}. Panchanga which means 'five arms' consists of the five most important parts - <em>Tithi, Vaara, Nakshatra, Yoga,} and <em>Karana}. The <em>Vaara} or the day of the week is based on Sun alone; <em>Tithi} and <em>Karana} are based upon Moon alone; <em>Nakshatra} and <em>Yoga} are based upon both Moon and Sun. This makes the Hindu calendar a true lunisolar calendar. <em>VedicDateTime} contributes a new calendar system in R that can have huge potential to discover meaningful patterns in natural time series.
+The \textit{VedicDateTime} package aims to convert the commonly used Gregorian date-time to the Vedic date-time as per the calculations of the \textit{Panchang}. Panchanga which means 'five arms' consists of the five most important parts - \textit{Tithi, Vaara, Nakshatra, Yoga,} and \textit{Karana}. The \textit{Vaara} or the day of the week is based on Sun alone; \textit{Tithi} and \textit{Karana} are based upon Moon alone; \textit{Nakshatra} and \textit{Yoga} are based upon both Moon and Sun. This makes the Hindu calendar a true lunisolar calendar. \textit{VedicDateTime} contributes a new calendar system in R that can have huge potential to discover meaningful patterns in natural time series.
 
-Before we get into calendar systems, we need to be clear with the concept of <em>Ayanamsha}. The Earth revolves anti-clockwise around the Sun in an elliptical orbit. The time taken by the earth to arrive at one vernal equinox from the other vernal equinox after one revolution is called as \textbf{tropical year}. At the end of the tropical year if we consider the position of the Earth with respect to a fixed star in the zodiac, the Earth appears to lie 50.26 seconds of celestial longitude to the west of its original position. In order to arrive at the same position with respect to a fixed star in the zodiac, the time taken is called as \textbf{sidereal year}. This is the result of precession of the Earth's axis due to its wobble in clockwise direction. The precession of the equinoxes increases by 50.2 seconds every year. The distance between the Vernal equinox and the 1st point of Aries (Mesha) on the fixed zodiac is progressively increasing. The distance at any given point of time is called as <em>Ayanamsha}.
+Before we get into calendar systems, we need to be clear with the concept of \textit{Ayanamsha}. The Earth revolves anti-clockwise around the Sun in an elliptical orbit. The time taken by the earth to arrive at one vernal equinox from the other vernal equinox after one revolution is called as \textbf{tropical year}. At the end of the tropical year if we consider the position of the Earth with respect to a fixed star in the zodiac, the Earth appears to lie 50.26 seconds of celestial longitude to the west of its original position. In order to arrive at the same position with respect to a fixed star in the zodiac, the time taken is called as \textbf{sidereal year}. This is the result of precession of the Earth's axis due to its wobble in clockwise direction. The precession of the equinoxes increases by 50.2 seconds every year. The distance between the Vernal equinox and the 1st point of Aries (Mesha) on the fixed zodiac is progressively increasing. The distance at any given point of time is called as \textit{Ayanamsha}.
 
-We have two calendar systems-- \textbf{Sayana} and \textbf{Nirayana}. <em>Sayana calendars}, also called as tropical calendars which means with <em>Ayana}. <em>Nirayana calendars}, also called as sidereal calendars which means without <em>Ayana}. The <em>Nirayana} values can be found out by subtracting the <em>Ayanamsa} from the <em>Sayana} values.
+We have two calendar systems-- \textbf{Sayana} and \textbf{Nirayana}. \textit{Sayana calendars}, also called as tropical calendars which means with \textit{Ayana}. \textit{Nirayana calendars}, also called as sidereal calendars which means without \textit{Ayana}. The \textit{Nirayana} values can be found out by subtracting the \textit{Ayanamsa} from the \textit{Sayana} values.
 
 Each aspect (function) of the package is explained below. Each and every detail concerning each function is mentioned there and then.
 
@@ -60,12 +60,12 @@ library(VedicDateTime)
 ## Tithi
 
 \begin{quotation}
-<em>"The luminosity of the Moon is caused by light from the Sun. It is the varying relative positions of the Sun and the Moon that produce the phases of the Moon."} \cite{kscharak}
+\textit{"The luminosity of the Moon is caused by light from the Sun. It is the varying relative positions of the Sun and the Moon that produce the phases of the Moon."} \cite{kscharak}
 \end{quotation}
 
-\textbf{Tithi} can be called as a lunar day. When the moon traverses 12° in longitude relative to the sun, a tithi is completed. Fifteen tithis in the waxing phase (<em>Shukla paksha}) with end tithi as full moon day (<em>Purnima}) and other fifteen tithis in the waning phase (<em>Krishna paksha}) with end tithi as new moon day (<em>Amavasya}). These phases together constitute a lunar month which is of thirty tithis.
+\textbf{Tithi} can be called as a lunar day. When the moon traverses 12° in longitude relative to the sun, a tithi is completed. Fifteen tithis in the waxing phase (\textit{Shukla paksha}) with end tithi as full moon day (\textit{Purnima}) and other fifteen tithis in the waning phase (\textit{Krishna paksha}) with end tithi as new moon day (\textit{Amavasya}). These phases together constitute a lunar month which is of thirty tithis.
 
-Tithi doesn't require <em>Ayanamsa} because it is the difference of longitudes and even if <em>Ayanamsa} is subtracted from each longitude, it doesn't matter \cite{ramakumar}.
+Tithi doesn't require \textit{Ayanamsa} because it is the difference of longitudes and even if \textit{Ayanamsa} is subtracted from each longitude, it doesn't matter \cite{ramakumar}.
 
 \break
 ### Calculation of Tithi
@@ -119,7 +119,7 @@ tithi<-function(jd,place){
 
 
 
-At first, we take the \textbf{date} as Julian's day number and \textbf{place} as the latitude, longitude, and time zone of the place for which the calculations are to be made as parameters of the function. The \textbf{sunrise} for the given date and place is found using another function which uses the <em>Swiss-ephemeris} to get the sunrise as a Julian day number. Tithi is found out during the sunrise as the difference between lunar and solar longitudes divided by 12. Tithi is generally obtained as a decimal number. The fractional part of the Tithi is used to find out the remaining degrees to the next Tithi which is used to find the time when that Tithi ends. The time taken to complete the remaining degrees is given by <em>Inverse Lagrange’s interpolation} of the Tithis found by using the lunar and solar longitudes at the intervals of 0.25 days from sunrise. The obtained Tithi and its ending time are added to the output vector. Sometimes two Tithis can occur on a given date so, we check for skipped tithi by checking the Tithi of the next day and if a Tithi is skipped then, the skipped Tithi is included in the output with its ending time.
+At first, we take the \textbf{date} as Julian's day number and \textbf{place} as the latitude, longitude, and time zone of the place for which the calculations are to be made as parameters of the function. The \textbf{sunrise} for the given date and place is found using another function which uses the \textit{Swiss-ephemeris} to get the sunrise as a Julian day number. Tithi is found out during the sunrise as the difference between lunar and solar longitudes divided by 12. Tithi is generally obtained as a decimal number. The fractional part of the Tithi is used to find out the remaining degrees to the next Tithi which is used to find the time when that Tithi ends. The time taken to complete the remaining degrees is given by \textit{Inverse Lagrange’s interpolation} of the Tithis found by using the lunar and solar longitudes at the intervals of 0.25 days from sunrise. The obtained Tithi and its ending time are added to the output vector. Sometimes two Tithis can occur on a given date so, we check for skipped tithi by checking the Tithi of the next day and if a Tithi is skipped then, the skipped Tithi is included in the output with its ending time.
 
 ```{r}
 jd <- 2459778 #Julian day number
@@ -164,7 +164,7 @@ get_tithi_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 
 \textbf{Vaara} is the day of the week very similar to the Gregorian calendar. 
 \begin{quotation}
-<em>"The seven days of the week have the seven Grahas from the Sun to Saturn as their lords."}  \cite{kscharak}
+\textit{"The seven days of the week have the seven Grahas from the Sun to Saturn as their lords."}  \cite{kscharak}
 \end{quotation}
 
 ### Calculation of Vaara
@@ -218,12 +218,12 @@ get_vaara_name(gregorian_to_jd(6,8,2022))
 ## Nakshatra
 
 \begin{quotation}
-<em>"Imagine a belt or a path in the sky, some 18 degrees of arc in width, running around the earth in an east-west direction. Groups of stars, to all appearance fixed, are studded along this imaginary belt. Twenty seven (or twenty eight!) such groups of stars are recognised in Vedic astrology. Because of lack of apparent motion, these are called as Nakshatras. This imaginary belt, with nakshatras studded on it, is called the zodiac.
+\textit{"Imagine a belt or a path in the sky, some 18 degrees of arc in width, running around the earth in an east-west direction. Groups of stars, to all appearance fixed, are studded along this imaginary belt. Twenty seven (or twenty eight!) such groups of stars are recognised in Vedic astrology. Because of lack of apparent motion, these are called as Nakshatras. This imaginary belt, with nakshatras studded on it, is called the zodiac.
 The zodiac forms the reference point for fixing up the position of any planet or star in the sky. Since it encircles the earth, it is comprised of 360 degrees. The twenty-seven nakshatras being evenly placed on it each have a span of 13°20' arc. The various nakshatras are numbered from one to twenty-seven."}  \cite{kscharak}
 
 \end{quotation}
 
-The absolute longitude of the Moon is used to calculate the Nakshatra of the day. This requires \textbf{Ayanamsa} to be subtracted from the moon's tropical (<em>Sayana}) longitude to get its sidereal (<em>Nirayana}) longitude which can be used to find out the nakshatra.
+The absolute longitude of the Moon is used to calculate the Nakshatra of the day. This requires \textbf{Ayanamsa} to be subtracted from the moon's tropical (\textit{Sayana}) longitude to get its sidereal (\textit{Nirayana}) longitude which can be used to find out the nakshatra.
 
 ### Calculation of Nakshatra
 
@@ -270,7 +270,7 @@ nakshatra <- function(jd,place){
 
 ```
 
-The \textbf{Ayanamsa} which is obtained from the <em>Swiss Ephemeris} and is set to <em>Lahiri Ayanamsa}. \textbf{Date} as Julian's day number and the \textbf{place} as latitude, longitude, and time zone are passed as arguments of the function. The \textbf{sunrise} for the given date and place is found using the sunrise function which uses the <em>Swiss Ephemeris} to get the sunrise as a Julian day number. The <em>Nirayana longitude} of the \textbf{Moon} is obtained by subtracting the <em>Ayanamsa} from its <em>Sayana longitude}. The <em>Nirayana longitude} of moon is multiplied by 27 and then divided by 360 to get Nakshatra as a decimal number. The ending time of this Nakshatra is obtained by checking for the starting time of the next Nakshatra using <em>Lagrange’s inverse interpolation} of Nirayana lunar longitudes at 0.25 intervals of day. Nakshatra and its ending time are added to the output vector. Sometimes two Nakshatras can occur on a given date so, we check for skipped Nakshatra by checking the Nakshatra of the next day and if a Nakshatra is skipped then, the skipped Nakshatra is included in the output with its ending time.
+The \textbf{Ayanamsa} which is obtained from the \textit{Swiss Ephemeris} and is set to \textit{Lahiri Ayanamsa}. \textbf{Date} as Julian's day number and the \textbf{place} as latitude, longitude, and time zone are passed as arguments of the function. The \textbf{sunrise} for the given date and place is found using the sunrise function which uses the \textit{Swiss Ephemeris} to get the sunrise as a Julian day number. The \textit{Nirayana longitude} of the \textbf{Moon} is obtained by subtracting the \textit{Ayanamsa} from its \textit{Sayana longitude}. The \textit{Nirayana longitude} of moon is multiplied by 27 and then divided by 360 to get Nakshatra as a decimal number. The ending time of this Nakshatra is obtained by checking for the starting time of the next Nakshatra using \textit{Lagrange’s inverse interpolation} of Nirayana lunar longitudes at 0.25 intervals of day. Nakshatra and its ending time are added to the output vector. Sometimes two Nakshatras can occur on a given date so, we check for skipped Nakshatra by checking the Nakshatra of the next day and if a Nakshatra is skipped then, the skipped Nakshatra is included in the output with its ending time.
 
 Nakshatra for given date and place.
 
@@ -311,11 +311,11 @@ get_nakshatra_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 ## Yoga
 
 
-There are \textbf{27 Yogas}, each measure 13°20' of the arc. Yoga is the sum of sidereal (<em>Nirayana}) longitudes of sun and moon in the multiples of 13° 20'. When the sidereal longitudes of sun and moon are added and they are divided by 13°20', the quotient plus one gives the number which denotes the respective Yoga.
+There are \textbf{27 Yogas}, each measure 13°20' of the arc. Yoga is the sum of sidereal (\textit{Nirayana}) longitudes of sun and moon in the multiples of 13° 20'. When the sidereal longitudes of sun and moon are added and they are divided by 13°20', the quotient plus one gives the number which denotes the respective Yoga.
 \begin{quotation}
 From an Indian astrological perspective,
 
-<em>"A yoga is a specific disposition of a planet or planets which is productive of specific results. There are hundreds, nay thousands, of yogas described in astrological texts. Their presence or absence in a horoscope, as also their strength and placement, determines the nature and stature of a native."}  \cite{kscharak}
+\textit{"A yoga is a specific disposition of a planet or planets which is productive of specific results. There are hundreds, nay thousands, of yogas described in astrological texts. Their presence or absence in a horoscope, as also their strength and placement, determines the nature and stature of a native."}  \cite{kscharak}
 \end{quotation}
 
 ### Calculation of Yoga
@@ -378,7 +378,7 @@ yoga <- function(jd,place){
 }
 ```
 
-The \textbf{Ayanamsa} which is obtained from the <em>Swiss Ephemeris} and is set to <em>Lahiri Ayanamsa}. \textbf{Date} as Julian's day number and the \textbf{place} as latitude, longitude, and time zone are passed as arguments of the function. The <em>sunrise} for the given date and place is found using the sunrise function which uses the <em>Swiss Ephemeris} to get the sunrise as a Julian day number. The <em>Nirayana} longitudes of the sun and moon are obtained by subtracting <em>Ayanamsa} from their <em>Sayana longitudes}. The sum of <em>Nirayana longitudes} of \textbf{Moon} and \textbf{Sun} is obtained and their mod 360 is performed so that the sum does not exceed 360. The resulting sum is multiplied by 27 and then divided by 360 to get Yoga as a decimal number. The fractional part of the Yoga is used to find out the remaining degrees to the next Yoga which is used to find the time when that Yoga ends. The time taken to complete the remaining degrees is given by <em>Inverse Lagrange’s interpolation} of the Yoga found by using the lunar and solar longitudes at the intervals of 0.25 days from sunrise. The obtained Yoga and its ending time are added to the output vector. Sometimes two Yogas can occur on a given date so, we check for skipped Yoga  by checking the Yoga of the next day and if a Yoga is skipped then, the skipped Yoga is included in the output with its ending time.
+The \textbf{Ayanamsa} which is obtained from the \textit{Swiss Ephemeris} and is set to \textit{Lahiri Ayanamsa}. \textbf{Date} as Julian's day number and the \textbf{place} as latitude, longitude, and time zone are passed as arguments of the function. The \textit{sunrise} for the given date and place is found using the sunrise function which uses the \textit{Swiss Ephemeris} to get the sunrise as a Julian day number. The \textit{Nirayana} longitudes of the sun and moon are obtained by subtracting \textit{Ayanamsa} from their \textit{Sayana longitudes}. The sum of \textit{Nirayana longitudes} of \textbf{Moon} and \textbf{Sun} is obtained and their mod 360 is performed so that the sum does not exceed 360. The resulting sum is multiplied by 27 and then divided by 360 to get Yoga as a decimal number. The fractional part of the Yoga is used to find out the remaining degrees to the next Yoga which is used to find the time when that Yoga ends. The time taken to complete the remaining degrees is given by \textit{Inverse Lagrange’s interpolation} of the Yoga found by using the lunar and solar longitudes at the intervals of 0.25 days from sunrise. The obtained Yoga and its ending time are added to the output vector. Sometimes two Yogas can occur on a given date so, we check for skipped Yoga  by checking the Yoga of the next day and if a Yoga is skipped then, the skipped Yoga is included in the output with its ending time.
 
 
 Yoga for given date and place.
@@ -419,7 +419,7 @@ get_yoga_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 
 ## Karana
 
-A \textbf{Karana} is half of a tithi or when the moon traverses 6° in longitude relative to the sun. In <em>30 tithis} of a lunar month, there are 60 <em>Karanas} or half-tithis.
+A \textbf{Karana} is half of a tithi or when the moon traverses 6° in longitude relative to the sun. In \textit{30 tithis} of a lunar month, there are 60 \textit{Karanas} or half-tithis.
 
 ### Calculation of Karana
 
@@ -431,29 +431,29 @@ karana <- function(jd,place){
 }
 ```
 
-To find out Karana for a given date and place where, \textbf{date} is given as a <em>Julian day number} and \textbf{place} as latitude, longitude and time zone. Date and place are passed to the Tithi function which finds out the Tithi(s). This Tithis are used to output corresponding Karnas.
+To find out Karana for a given date and place where, \textbf{date} is given as a \textit{Julian day number} and \textbf{place} as latitude, longitude and time zone. Date and place are passed to the Tithi function which finds out the Tithi(s). This Tithis are used to output corresponding Karnas.
 
 
 There are \textbf{4 Karanas} that occur \textbf{only once} in a lunar month. They are the fixed Karanas and called as:
 
-1.<em>Shakuni}: assigned to the latter half of the 14th day of <em>Krishna-paksha}.\
-2.<em>Chatushpada}:  assigned  to  the  first  half  of  the  Amavasya  (15th  day  of <em>Krishna-paksha}).\
-3.<em>Naga}: assigned to the latter half of the <em>Amavasya}.\
-4.<em>Kimstughna}: assigned to the first half of the first day of the <em>Shukla-paksha}.\
+1.\textit{Shakuni}: assigned to the latter half of the 14th day of \textit{Krishna-paksha}.\
+2.\textit{Chatushpada}:  assigned  to  the  first  half  of  the  Amavasya  (15th  day  of \textit{Krishna-paksha}).\
+3.\textit{Naga}: assigned to the latter half of the \textit{Amavasya}.\
+4.\textit{Kimstughna}: assigned to the first half of the first day of the \textit{Shukla-paksha}.\
 
 
 The  remaining \textbf{seven  Karanas}  recur  \textbf{eight  times}  during  rest  of  the  lunar month. Their names are:
 
 
-1.   <em>Bava} 
-2.   <em>Balava}
-3.   <em>Kanlava}
-4.   <em>Taitila}
-5.   <em>Gara}
-6.   <em>Vanija}
-7.   <em>Visht}
+1.   \textit{Bava} 
+2.   \textit{Balava}
+3.   \textit{Kanlava}
+4.   \textit{Taitila}
+5.   \textit{Gara}
+6.   \textit{Vanija}
+7.   \textit{Visht}
 
-These Karanas recur in regular order starting from the second half of the first day of <em>Shukla-paksha} until the first half of the 14th day of the <em>Krishna-paksha}. \cite{kscharak}
+These Karanas recur in regular order starting from the second half of the first day of \textit{Shukla-paksha} until the first half of the 14th day of the \textit{Krishna-paksha}. \cite{kscharak}
 
 Karana for given date and place.
 
@@ -487,11 +487,11 @@ get_karana_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 
 ## Rashi
 
-The zodiac is divided into 12 parts - Aries (<em>Mesha}), Taurus (<em>Vrishabha}), Gemini (<em>Mithuna}), Cancer (<em>Karka}), Leo (<em>Simha}), Virgo (<em>Kanya}), Libra (<em>Tula}), Scorpio (<em>Vruschika}), Sagittarius (<em>Dhanu}), Capricorn (<em>Makara}), Aquarius (<em>Kumbha}), and Pisces (<em>Meena}).
+The zodiac is divided into 12 parts - Aries (\textit{Mesha}), Taurus (\textit{Vrishabha}), Gemini (\textit{Mithuna}), Cancer (\textit{Karka}), Leo (\textit{Simha}), Virgo (\textit{Kanya}), Libra (\textit{Tula}), Scorpio (\textit{Vruschika}), Sagittarius (\textit{Dhanu}), Capricorn (\textit{Makara}), Aquarius (\textit{Kumbha}), and Pisces (\textit{Meena}).
 
 \begin{quotation}
 
-<em>"When the zodiac is divided into twelve equal parts, each such part has an extension of 30 degrees of the arc. Such a division is called a Sign or Rashi. A sign consists of two and a quarter nakshatras. A particular group of stars in the zodiac is considered as the starting point of the zodiac. From this point, the twenty-seven nakshatras or the twelve signs begin. A planet located anywhere along the zodiac may be considered as located in a particular sign, depending upon which twelfth division of the zodiac it is in; it may be considered as being located in a particular nakshatra too, depending upon which twenty seventh division of the zodiac it is in."}  \cite{kscharak}
+\textit{"When the zodiac is divided into twelve equal parts, each such part has an extension of 30 degrees of the arc. Such a division is called a Sign or Rashi. A sign consists of two and a quarter nakshatras. A particular group of stars in the zodiac is considered as the starting point of the zodiac. From this point, the twenty-seven nakshatras or the twelve signs begin. A planet located anywhere along the zodiac may be considered as located in a particular sign, depending upon which twelfth division of the zodiac it is in; it may be considered as being located in a particular nakshatra too, depending upon which twenty seventh division of the zodiac it is in."}  \cite{kscharak}
 
 \end{quotation}
 
@@ -508,7 +508,7 @@ rashi <- function(jd){
 }
 ```
 
-The <em>Ayanamsa} is set to <em>Lahiri ayanamsa} and the lunar longitude(tropical) is obtained for the given date which is taken as the Julian day number. The sidereal (<em>Nirayana}) longitude of the moon is calculated by subtracting the Ayanamsa from the obtained tropical longitude then a mod of 360 is performed to ensure that it doesn’t exceed 360 and the result is divided by 30 to obtain Rashi as an integer.
+The \textit{Ayanamsa} is set to \textit{Lahiri ayanamsa} and the lunar longitude(tropical) is obtained for the given date which is taken as the Julian day number. The sidereal (\textit{Nirayana}) longitude of the moon is calculated by subtracting the Ayanamsa from the obtained tropical longitude then a mod of 360 is performed to ensure that it doesn’t exceed 360 and the result is divided by 30 to obtain Rashi as an integer.
 
 
 Rashi(Moon-sign) for a given Julian day number -
@@ -541,7 +541,7 @@ get_rashi_name(jd)
 \begin{quotation}
 From an Indian astronomical perspective,
 
-<em>"The twelve houses of a horoscope deal with all conceivable aspects of life. The most important of all houses is the lagna or the first house. The remaining houses are basically related to the first house only. The planets in the horoscopic chart are subservient to the lagna, and their original nature undergoes modifications depending upon the lagna."}  \cite{kscharak}
+\textit{"The twelve houses of a horoscope deal with all conceivable aspects of life. The most important of all houses is the lagna or the first house. The remaining houses are basically related to the first house only. The planets in the horoscopic chart are subservient to the lagna, and their original nature undergoes modifications depending upon the lagna."}  \cite{kscharak}
 \end{quotation}
 
 ### Calculation of Lagna
@@ -555,7 +555,7 @@ lagna <- function(jd){
 }
 ```
 
-The <em>Ayanamsa} is set to <em>Lahiri ayanamsa} and the solar longitude(tropical) is obtained for the given date which is taken as the Julian day number. The sidereal (<em>Nirayana}) longitude of the sun is calculated by subtracting the Ayanamsa from the obtained tropical longitude then a mod of 360 is performed to ensure that it doesn’t exceed 360 and the result is divided by 30 to obtain Lagna as an integer.
+The \textit{Ayanamsa} is set to \textit{Lahiri ayanamsa} and the solar longitude(tropical) is obtained for the given date which is taken as the Julian day number. The sidereal (\textit{Nirayana}) longitude of the sun is calculated by subtracting the Ayanamsa from the obtained tropical longitude then a mod of 360 is performed to ensure that it doesn’t exceed 360 and the result is divided by 30 to obtain Lagna as an integer.
 
 
 Lagna(sun-sign) for a given Julian day number -
@@ -577,16 +577,16 @@ get_lagna_name(jd)
 
 ## Masa
 
-\textbf{Masa} is the lunar month in the Vedic calendar system. The year as per the Hindu calendar starts from <em>Chaitra masa} and ends at <em>Phalguna masa}. Every masa has a fixed number of <em>Tithis}. A Masa has  \textbf{2 Pakshas} (<em>Krishna paksha} and <em>Shukla paksha}) - \textbf{30 Tithis} in total.
+\textbf{Masa} is the lunar month in the Vedic calendar system. The year as per the Hindu calendar starts from \textit{Chaitra masa} and ends at \textit{Phalguna masa}. Every masa has a fixed number of \textit{Tithis}. A Masa has  \textbf{2 Pakshas} (\textit{Krishna paksha} and \textit{Shukla paksha}) - \textbf{30 Tithis} in total.
 
 
-<em>Chaitra Masa} doesn’t begin on the 1st January of the Gregorian calendar. It rather begins on <em>Ugadi} (<em>Gudi Padva} or Hindu new year) which starts when <em>Amavasya Tithi} (New moon) of the <em>Phalguna masa} ends.
+\textit{Chaitra Masa} doesn’t begin on the 1st January of the Gregorian calendar. It rather begins on \textit{Ugadi} (\textit{Gudi Padva} or Hindu new year) which starts when \textit{Amavasya Tithi} (New moon) of the \textit{Phalguna masa} ends.
 
 
-In one year, the number of Masas is not fixed as there can be 12 or 13 Masas in it. When the number of Tithis in a Masa is fixed, to compensate for the remaining days (Like in the Gregorian calendar which has 28-31 days in a month) an intercalary month is added every 32.5 months. This extra masa is called <em>Adhika Masa}. It is usually referred by adding a suffix of its previous masa like – <em>Adhika Jyeshtha masa}. It can occur between any two Masas but, it follows a regular interval of 32.5 months.
+In one year, the number of Masas is not fixed as there can be 12 or 13 Masas in it. When the number of Tithis in a Masa is fixed, to compensate for the remaining days (Like in the Gregorian calendar which has 28-31 days in a month) an intercalary month is added every 32.5 months. This extra masa is called \textit{Adhika Masa}. It is usually referred by adding a suffix of its previous masa like – \textit{Adhika Jyeshtha masa}. It can occur between any two Masas but, it follows a regular interval of 32.5 months.
 
 
-As there is the lunar year with the extra month (<em>Adhika masa}), so it there a lunar year with a diminished or reduced month, with only eleven months only is very rare indeed. It occurs once in 140 years or once in 190 years it is called <em>Kshaya Masa} or Lost Month.
+As there is the lunar year with the extra month (\textit{Adhika masa}), so it there a lunar year with a diminished or reduced month, with only eleven months only is very rare indeed. It occurs once in 140 years or once in 190 years it is called \textit{Kshaya Masa} or Lost Month.
 
 ### Calculation of Masa
 
@@ -608,7 +608,7 @@ masa <- function(jd,place){
 }
 ```
 
-At first, the <em>Tithi} and sunrise of the given date and place is obtained then, the previous and next new moon is obtained from the given date and calculated <em>tithi}. The sun sign(<em>lagna}) for the previous and next new moon day is obtained. If these two sun-signs are same then the Masa is <em>Adhika masa}. The masa number is one added to the sun sign of this month. Its mod 12 is returned so that it does not exceed 12.
+At first, the \textit{Tithi} and sunrise of the given date and place is obtained then, the previous and next new moon is obtained from the given date and calculated \textit{tithi}. The sun sign(\textit{lagna}) for the previous and next new moon day is obtained. If these two sun-signs are same then the Masa is \textit{Adhika masa}. The masa number is one added to the sun sign of this month. Its mod 12 is returned so that it does not exceed 12.
 
 
 Masa for a given place and time.
@@ -647,7 +647,7 @@ get_masa_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 
 ## Ritu
 
-\textbf{Ritu} means \textbf{season}. There are 6 Ritus which represent the 6 seasons. The year starts from <em>Vasanta ritu} which is the spring season and ends at <em>Shishir Ritu} which is the winter season.
+\textbf{Ritu} means \textbf{season}. There are 6 Ritus which represent the 6 seasons. The year starts from \textit{Vasanta ritu} which is the spring season and ends at \textit{Shishir Ritu} which is the winter season.
 
 The following are the Ritus , seasons they represent and their respective Masas - 
 
@@ -693,7 +693,7 @@ get_ritu_name(masa_num)
 
 ## Samvatsara
 
-\textbf{Samvatsara} means <em>Year} in <em>Sanskrit}. It is a cycle of 60 Samvatsaras in Hindu Panchang which is of 60 years. There are different types of Samvatsaras based on the point which is considered as their starting point. <em>Saka Samvatsara}, the epoch of which corresponds to Julian year 78 and <em>Vikram Samvatsara} which is ahead of <em>Saka Samvatsara} by 135 years are some of the commonly used calendar systems.
+\textbf{Samvatsara} means \textit{Year} in \textit{Sanskrit}. It is a cycle of 60 Samvatsaras in Hindu Panchang which is of 60 years. There are different types of Samvatsaras based on the point which is considered as their starting point. \textit{Saka Samvatsara}, the epoch of which corresponds to Julian year 78 and \textit{Vikram Samvatsara} which is ahead of \textit{Saka Samvatsara} by 135 years are some of the commonly used calendar systems.
 
 ### Calculations of Samvatsara
 
