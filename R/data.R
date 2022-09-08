@@ -85,18 +85,6 @@ nakshatras <- c(
   "Uttarabhadrapada",
   "Revati"
 )
-# ---------------------------------------------------------------------------- #
-#' varas
-#' @description Name of the day of the week
-varas <- c(
-  "Ravivara",
-  "Somavara",
-  "Mangalavara",
-  "Budhavara",
-  "Guruvara",
-  "Shukravara",
-  "Shanivara"
-)
 
 # ---------------------------------------------------------------------------- #
 #' ritus

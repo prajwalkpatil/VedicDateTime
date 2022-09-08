@@ -789,7 +789,7 @@ sun_longitude(2459778)
 sun_longitude(gregorian_to_jd(17,6,2022))
 ```
 
-## Moon's lonitude
+## Moon's longitude
 
 Get Lunar longitude for a given Julian day number.
 
