@@ -1,5 +1,10 @@
 ---
 title: "VedicDateTime: An R package to implement Vedic calendar system"
+author: 
+  - "Neeraj Dhanraj Bokde"
+  - "Prajwal Kailasnath Patil"
+  - "Saradindu Sengupta"
+  - "Andrés Elías Feijóo Lorenzo"
 output:   
   rmdformats::readthedown:
     self_contained: yes
