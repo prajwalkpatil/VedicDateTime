@@ -19,7 +19,8 @@ Suggests:
     testthat (>= 3.0.0),
     qpdf,
     formatR,
-    spelling
+    spelling,
+    tinytex
 VignetteBuilder: knitr
 Imports: swephR
 Config/testthat/edition: 3
