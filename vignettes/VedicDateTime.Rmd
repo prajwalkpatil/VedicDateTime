@@ -1,5 +1,6 @@
 ---
-title: "VedicDateTime: An R package to implement Vedic calendar system"
+title: "VedicDateTime"
+subtitle: <h1>An R package to implement Vedic calendar system<h1>
 author: 
   - "Neeraj Dhanraj Bokde"
   - "Prajwal Kailasnath Patil"
@@ -20,6 +21,11 @@ output:
     highlight: tango
   word_document:
     toc: yes
+header-includes:
+  - \usepackage{titling}
+  - \pretitle{\begin{center}
+    \includegraphics[width=2in,height=2in]{icon.png}\LARGE\\}
+  - \posttitle{\end{center}}
 vignette: >
   %\VignetteIndexEntry{VedicDateTime: An R package to implement Vedic calendar system}
   %\VignetteEngine{knitr::rmarkdown}
