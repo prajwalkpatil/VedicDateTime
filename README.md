@@ -1,4 +1,4 @@
-# VedicDateTime<a href='https://www.neerajbokde.in/viggnette/2022-09-05-VedicDateTime'><img src="doc/icon.png" alt="alt text" align="right" width="200"/>
+# VedicDateTime<a href='https://www.neerajbokde.in/viggnette/2022-09-05-VedicDateTime'><img src="vignettes/icon.png" alt="alt text" align="right" width="200"/>
 
 <!-- badges: start -->
 [![codecov](https://codecov.io/gh/saradindusengupta/VedicDateTime/branch/main/graph/badge.svg?token=788ELH8KF6)](https://codecov.io/gh/saradindusengupta/VedicDateTime)
