@@ -2,7 +2,7 @@ Package: VedicDateTime
 Type: Package
 Title: Vedic Calendar System
 Version: 0.1.0
-Author:  Neeraj Dhanraj Bokde, Prajwal Kailasnath Patil, Saradindu Sengupta, Andrés Elías Feijóo Lorenzo 
+Author: Neeraj Dhanraj Bokde, Prajwal Kailasnath Patil, Saradindu Sengupta, Andrés Elías Feijóo Lorenzo 
 Maintainer: Neeraj Dhanraj Bokde <neerajdhanraj@gmail.com>
 Description: Provides platform for Vedic calendar system having several
     functionalities to facilitate conversion between Gregorian and Vedic
@@ -18,7 +18,10 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     qpdf,
-    formatR
+    formatR,
+    spelling,
+    tinytex
 VignetteBuilder: knitr
 Imports: swephR
 Config/testthat/edition: 3
+Language: en-US
