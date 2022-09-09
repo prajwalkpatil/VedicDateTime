@@ -1,11 +1,5 @@
-# R CMD CHECK results
+## R CMD check results
 
-There were no ERRORs, WARNINGs and NOTEs for local R CMD CHECK on Ubuntu.
+0 errors | 0 warnings | 1 note
 
-There was 1 NOTE from [win-builder](https://win-builder.r-project.org/):
-
-```{text}
-
-checking CRAN incoming feasibility ... NOTE
-
-```
+* This is a new release.
