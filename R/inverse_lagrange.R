@@ -11,7 +11,7 @@
 #'
 inverse_lagrange <- function(x,y,ya){
   if(length(x) != length(y)){
-    print("Lengths are not equal!")
+    warning("Lengths are not equal!")
   }
   total <- 0
   for(i in 1:length(x)){

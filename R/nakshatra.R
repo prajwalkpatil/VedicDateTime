@@ -12,7 +12,6 @@
 #' nakshatra(2459778,c(15.34, 75.13, +5.5))
 #' nakshatra(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
 nakshatra <- function(jd,place){
-  #Nakshatra as -> 1 = Ashwini, 2 = Bharani, ..., 27 = Revati
 
   #Set Lahiri ayanamsa
   swephR::swe_set_sid_mode(swephR::SE$SIDM_LAHIRI,0,0)
