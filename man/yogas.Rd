@@ -11,6 +11,6 @@ An object of class \code{character} of length 27.
 yogas
 }
 \description{
-Name of the 27 yogas which is sum of sidereal longitudes of sun and moon in the multiples of 13° 20’
+Name of the 27 yogas which is sum of sidereal longitudes of sun and moon in the multiples of 13 degrees 20 minutes
 }
 \keyword{datasets}

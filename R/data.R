@@ -166,7 +166,7 @@ samvatsars <- c(
 
 # ---------------------------------------------------------------------------- #
 #' yogas
-#' @description Name of the 27 yogas which is sum of sidereal longitudes of sun and moon in the multiples of 13° 20’
+#' @description Name of the 27 yogas which is sum of sidereal longitudes of sun and moon in the multiples of 13 degrees 20 minutes
 yogas <- c(
   "Vishkhamba",
   "Preeti",
