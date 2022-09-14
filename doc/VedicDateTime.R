@@ -14,52 +14,6 @@ options(digits = 5)
 ## ----setup--------------------------------------------------------------------
 library(VedicDateTime)
 
-## ----Tithi, width="50"--------------------------------------------------------
-tithi<-function(jd,place){
-  # Tithi as -> 1 = Shukla paksha prathama, 2 = Shukla paksha dvitiya,...
-
-  tz = place[3] #Timezone of the place
-
-  #1. Find time of sunrise at a given place
-  rise = sunrise(jd,place)[1] - (tz/24)
-
-  #2. Find tithi on this Julian day number at a given place
-  moon_phase = lunar_phase(rise)
-  today = ceiling(moon_phase/12)
-  degrees_left = today * 12 - moon_phase
-
-  # 3. Compute longitudinal differences at intervals of 0.25 days from sunrise
-  offsets = c(0.25,0.5,0.75,1.0)
-  lunar_longitude_diff = c()
-  solar_longitude_diff = c()
-  relative_motion = c()
-  for(i in 1:length(offsets)){
-    lunar_longitude_diff <- append(lunar_longitude_diff,((moon_longitude(rise + offsets[i]) - moon_longitude(rise)) %% 360));
-    solar_longitude_diff <- append(solar_longitude_diff,((sun_longitude(rise + offsets[i]) - sun_longitude(rise)) %% 360));
-    relative_motion <- append(relative_motion,(lunar_longitude_diff[i]- solar_longitude_diff[i]))
-  }
-  # 4. Find end time by 4-point inverse Lagrange interpolation
-  y = relative_motion
-  x = offsets
-  # Compute fraction of day (after sunrise) needed to traverse 'degrees_left'
-  approx_end = inverse_lagrange(x,y,degrees_left)
-  ends = (rise + approx_end - jd) * 24 + tz
-  answer = c(as.integer(today),to_dms(ends))
-
-  # 5. Check for skipped tithi
-  moon_phase_tom = lunar_phase(rise + 1)
-  tomorrow = ceiling(moon_phase_tom/12)
-  if(((tomorrow-today) %% 30) > 1){
-    # interpolate again with same (x,y)
-    leap_tithi = today + 1
-    degrees_left = leap_tithi * 12 - moon_phase
-    approx_end = inverse_lagrange(x,y,degrees_left)
-    ends = (rise + approx_end - jd) * 24 + tz
-    answer <- append(answer,c(as.integer(leap_tithi),to_dms(ends)))
-  }
-  return (answer)
-}
-
 ## -----------------------------------------------------------------------------
 jd <- 2459778 #Julian day number
 place <- c(15.34, 75.13, +5.5) #Latitude, Longitude and timezone of the location
@@ -113,48 +67,6 @@ get_vaara_name(2459778)
 get_vaara_name(gregorian_to_jd(6,8,2022))
 
 ## -----------------------------------------------------------------------------
-nakshatra <- function(jd,place){
-  #Nakshatra as -> 1 = Ashwini, 2 = Bharani, ..., 27 = Revati
-
-  #Set Lahiri ayanamsa
-  swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
-
-  # 1. Find time of sunrise
-  lat = place[1]
-  lon = place[2]
-  tz = place[3]
-  rise = sunrise(jd,place)[1]-(tz/24)
-
-  # Swiss Ephemeris always gives Sayana. So subtract ayanamsa to get Nirayana
-  offsets = c(0.0,0.25,0.5,0.75,1.0)
-  longitudes = c()
-  for(i in 1:length(offsets)){
-    longitudes <- append(longitudes,((moon_longitude(rise + offsets[i]) - swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360))
-  }
-  # 2. Today's nakshatra is when offset = 0
-  # There are 27 Nakshatras spanning 360 degrees
-  nak = ceiling(longitudes[1] * 27 / 360)
-
-  # 3. Find end time by 5-point inverse Lagrange interpolation
-  y = unwrap_angles(longitudes)
-  x = offsets
-  approx_end = inverse_lagrange(x,y,nak * 360/27)
-  ends = (rise - jd + approx_end) * 24 + tz
-  answer = c(as.integer(nak),to_dms(ends))
-
-  # 4. Check for skipped nakshatra
-  nak_tmrw = ceiling(longitudes[length(longitudes)-1] * 27 / 360)
-  if(((nak_tmrw - nak) %% 27) > 1){
-    leap_nak = nak + 1
-    approx_end = inverse_lagrange(offsets,longitudes,leap_nak*360/27)
-    ends = (rise - jd + approx_end) * 24 + tz
-    answer <- append(answer,c(as.integer(leap_nak),to_dms(ends)))
-  }
-  return (answer)
-}
-
-
-## -----------------------------------------------------------------------------
 jd <- 2459778 #Julian day number
 place <- c(15.34, 75.13, +5.5)  #Latitude, Longitude and timezone of the location
 nakshatra(jd,place)
@@ -174,63 +86,6 @@ get_nakshatra_name(jd,place)
 
 ## -----------------------------------------------------------------------------
 get_nakshatra_name(gregorian_to_jd(17,6,2022),c(15.34, 75.13, +5.5))
-
-## -----------------------------------------------------------------------------
-yoga <- function(jd,place){
-  #Yoga as -> 1 = Vishkambha, 2 = Priti, ..., 27 = Vaidhrti
-  swe_set_sid_mode(SE$SIDM_LAHIRI,0,0)
-
-  # 1. Find time of sunrise
-  lat = place[1]
-  lon = place[2]
-  tz = place[3]
-  rise = sunrise(jd,place)[1]-(tz/24)
-
-  # 2. Find the Nirayana longitudes and add them
-  lunar_long = (moon_longitude(rise) - swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
-  solar_long = (sun_longitude(rise) - swe_get_ayanamsa_ex_ut(rise,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
-  total = (lunar_long + solar_long) %% 360
-
-  # There are 27 Yogas spanning 360 degrees
-  yog = ceiling(total * 27 / 360)
-
-  # 3. Find how many longitudes is there left to be swept
-  degrees_left = yog * (360 / 27) - total
-
-  # 4. Compute longitudinal sums at intervals of 0.25 days from sunrise
-  offsets = c(0.25,0.5,0.75,1.0)
-  lunar_longitude_diff = c()
-  solar_longitude_diff = c()
-  total_motion = c()
-
-  for(i in 1:length(offsets)){
-    lunar_longitude_diff <- append(lunar_longitude_diff,((moon_longitude(rise + offsets[i]) - moon_longitude(rise)) %% 360))
-    solar_longitude_diff <- append(solar_longitude_diff,((sun_longitude(rise + offsets[i]) - sun_longitude(rise)) %% 360))
-    total_motion <- append(total_motion,(lunar_longitude_diff[i] + solar_longitude_diff[i]))
-  }
-  # 5. Find end time by 4-point inverse Lagrange interpolation
-  y = total_motion
-  x = offsets
-  # compute fraction of day (after sunrise) needed to traverse 'degrees_left'
-  approx_end = inverse_lagrange(x, y, degrees_left)
-  ends = (rise + approx_end - jd) * 24 + tz
-  answer = c(as.integer(yog),to_dms(ends))
-
-  # 5. Check for skipped yoga
-  lunar_long_tmrw = (moon_longitude(rise + 1) - swe_get_ayanamsa_ex_ut(rise + 1,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
-  solar_long_tmrw = (sun_longitude(rise + 1) - swe_get_ayanamsa_ex_ut(rise + 1,SE$FLG_SWIEPH + SE$FLG_NONUT)$daya) %% 360
-  total_tmrw = (lunar_long_tmrw + solar_long_tmrw) %% 360
-  tomorrow = ceiling(total_tmrw * 27 / 360)
-  if(((tomorrow - yog) %% 27) > 1){
-    # interpolate again with same (x,y)
-    leap_yog = yog + 1
-    degrees_left = leap_yog * (360 / 27) - total
-    approx_end = inverse_lagrange(x, y, degrees_left)
-    ends = (rise + approx_end - jd) * 24 + tz
-    answer <- append(answer,c(as.integer(leap_yog),to_dms(ends)))
-  }
-  return (answer)
-}
 
 ## -----------------------------------------------------------------------------
 jd <- 2459778 #Julian day number

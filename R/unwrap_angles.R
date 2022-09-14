@@ -15,7 +15,7 @@ unwrap_angles <- function(angles){
     }
   }
   if(is.unsorted(angles_unwraped)){
-    print("unwrap_angles : angles are not sorted!")
+    warning("unwrap_angles : angles are not sorted!")
   }
   return (angles_unwraped)
 }
