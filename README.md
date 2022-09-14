@@ -68,7 +68,7 @@ rhub::check_for_cran(check_args = c('--compact-vignettes=gs+qpdf'))
 ```
 ### Local - `R CMD CHECK`
 ```r
-devtools::check(args = c('--compact-vignettes=gs+qpdf'))
+devtools::check(build_args = c('--compact-vignettes=gs+qpdf'))
 ```
 
 ### Submit to CRAN
