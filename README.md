@@ -1,6 +1,7 @@
 # VedicDateTime<a href='https://www.neerajbokde.in/viggnette/2022-09-05-VedicDateTime'><img src="vignettes/icon.png" alt="alt text" align="right" width="200"/>
 
 <!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/VedicDateTime)](https://cran.r-project.org/package=VedicDateTime)
 [![codecov](https://codecov.io/gh/saradindusengupta/VedicDateTime/branch/main/graph/badge.svg?token=788ELH8KF6)](https://codecov.io/gh/saradindusengupta/VedicDateTime)
 [![R-CMD-check](https://github.com/saradindusengupta/VedicDateTime/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/saradindusengupta/VedicDateTime/actions/workflows/R-CMD-check.yaml)
 <!-- badges: start -->
