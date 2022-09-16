@@ -4,6 +4,7 @@
 [![CRAN status](https://www.r-pkg.org/badges/version/VedicDateTime)](https://cran.r-project.org/package=VedicDateTime)
 [![codecov](https://codecov.io/gh/saradindusengupta/VedicDateTime/branch/main/graph/badge.svg?token=788ELH8KF6)](https://codecov.io/gh/saradindusengupta/VedicDateTime)
 [![R-CMD-check](https://github.com/saradindusengupta/VedicDateTime/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/saradindusengupta/VedicDateTime/actions/workflows/R-CMD-check.yaml)
+[![lintr](https://github.com/saradindusengupta/VedicDateTime/actions/workflows/lintr.yml/badge.svg?branch=main&event=workflow_dispatch)](https://github.com/saradindusengupta/VedicDateTime/actions/workflows/lintr.yml)
 <!-- badges: start -->
 
 An R Package to work with Vedic Calendar System.
