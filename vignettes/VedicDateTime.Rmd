@@ -1,6 +1,6 @@
 ---
 title: "VedicDateTime"
-subtitle: <h1>An R package to implement Vedic calendar system<h1>
+subtitle: An R package to implement Vedic calendar system
 author: 
   - "Neeraj Dhanraj Bokde"
   - "Prajwal Kailasnath Patil"
