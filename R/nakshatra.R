@@ -40,11 +40,14 @@ nakshatra <- function(jd,place){
   answer = c(as.integer(nak),to_dms(ends))
 
   # 4. Check for skipped nakshatra
-  nak_tmrw = ceiling(longitudes[length(longitudes)-1] * 27 / 360)
+  nak_tmrw = ceiling((longitudes[length(longitudes)] * 27) / 360)
   if(((nak_tmrw - nak) %% 27) > 1){
-    leap_nak = nak + 1
+    leap_nak = (nak + 1) %% 27
     approx_end = inverse_lagrange(offsets,longitudes,leap_nak*360/27)
     ends = (rise - jd + approx_end) * 24 + tz
+    if(leap_nak >= 28){
+      leap_nak = (leap_nak %% 28) + 1
+    }
     answer <- append(answer,c(as.integer(leap_nak),to_dms(ends)))
   }
   return (answer)
