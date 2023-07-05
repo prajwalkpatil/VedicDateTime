@@ -51,6 +51,9 @@ tithi<-function(jd,place){
     degrees_left = leap_tithi * 12 - moon_phase
     approx_end = inverse_lagrange(x,y,degrees_left)
     ends = (rise + approx_end - jd) * 24 + tz
+    if(leap_tithi >= 31){
+      leap_tithi = (leap_tithi %% 31) + 1
+    }
     answer <- append(answer,c(as.integer(leap_tithi),to_dms(ends)))
   }
   return (answer)
