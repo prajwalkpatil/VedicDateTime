@@ -58,10 +58,13 @@
   tomorrow = ceiling(total_tmrw * 27 / 360)
   if(((tomorrow - yog) %% 27) > 1){
     # interpolate again with same (x,y)
-    leap_yog = yog + 1
+    leap_yog = (yog + 1)
     degrees_left = leap_yog * (360 / 27) - total
     approx_end = inverse_lagrange(x, y, degrees_left)
     ends = (rise + approx_end - jd) * 24 + tz
+    if(leap_yog >= 28){
+      leap_yog = (leap_yog %% 28) + 1
+    }
     answer <- append(answer,c(as.integer(leap_yog),to_dms(ends)))
   }
   return (answer)
