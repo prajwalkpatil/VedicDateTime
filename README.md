@@ -86,6 +86,13 @@ To run the test cases for development
 ```r
 devtools::test()
 ```
+## Test Coverage
+
+To generate the test coverage report cases for development
+
+```r
+covr::package_coverage("VedicDateTime")
+```
 
 ## CRAN
 
