@@ -1,10 +1,29 @@
-VedicDateTime Coverage: 70.37%
-R/main.R: 35.63%
-R/tithi.R: 81.48%
-R/nakshatra.R: 81.82%
-R/yoga.R: 85.29%
+VedicDateTime Coverage: 68.67%
+R/day_duration.R: 0.00%
+R/from_dms.R: 0.00%
+R/get_karana_name.R: 0.00%
+R/get_lagna_name.R: 0.00%
+R/get_masa_name.R: 0.00%
+R/get_nakshatra_name.R: 0.00%
+R/get_rashi_name.R: 0.00%
+R/get_ritu_name.R: 0.00%
+R/get_samvatsara_name.R: 0.00%
+R/get_tithi_name.R: 0.00%
+R/get_vaara_name.R: 0.00%
+R/get_yoga_name.R: 0.00%
+R/nakshatra.R: 75.00%
+R/tithi.R: 75.86%
+R/yoga.R: 80.56%
 R/unwrap_angles.R: 85.71%
 R/masa.R: 90.91%
+R/inverse_lagrange.R: 91.67%
+R/ahargana.R: 100.00%
+R/elapsed_year.R: 100.00%
+R/gregorian_to_jd.R: 100.00%
+R/jd_to_gregorian.R: 100.00%
+R/karana.R: 100.00%
+R/lagna.R: 100.00%
+R/lunar_phase.R: 100.00%
 R/moon_longitude.R: 100.00%
 R/moonrise.R: 100.00%
 R/moonset.R: 100.00%
