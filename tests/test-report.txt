@@ -1,5 +1,4 @@
 ℹ Testing VedicDateTime
-Error in install.packages : Updating loaded packages
 ✔ | F W S  OK | Context
 ✔ |         1 | ahargana
 ✔ |         1 | gregorian_to_jd
@@ -7,21 +6,21 @@ Error in install.packages : Updating loaded packages
 ✔ |         1 | karana
 ✔ |         1 | lagna
 ✔ |         1 | masa
-✔ |         1 | moon_longtitude
+✔ |         2 | moon_longtitude
 ✔ |         1 | moonrise
 ✔ |         1 | moonset
-✔ |         1 | nakshatra
+✔ |         2 | nakshatra
 ✔ |         1 | rashi
 ✔ |         1 | ritu
 ✔ |         1 | samvatsara
 ✔ |         1 | sun_longtitude
 ✔ |         1 | sunrise
 ✔ |         1 | sunset
-✔ |         1 | tithi
+✔ |         2 | tithi
 ✔ |         1 | vaara
-✔ |         1 | yoga
+✔ |         2 | yoga
 
-══ Results ══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
-Duration: 0.2 s
+══ Results ═════════════════════════════════════════════════════════════════════════════════════════════════
+Duration: 1.1 s
 
-[ FAIL 0 | WARN 0 | SKIP 0 | PASS 19 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 23 ]

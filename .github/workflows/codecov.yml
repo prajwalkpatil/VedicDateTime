@@ -1,0 +1,20 @@
+# Generate codecov report
+name: codecov-report
+on: [workflow_dispatch]
+jobs:
+  codecov:
+    name: Run codecov report
+    runs-on: ubuntu-latest
+    steps:        
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Setup R
+        uses: r-lib/actions/setup-r@4e1feaf90520ec1215d1882fdddfe3411c08e492
+        
+      - name: Install dependencies
+        run: Rscript -e "install.packages(c('remotes', 'rcmdcheck'))" -e "remotes::install_deps(dependencies = TRUE)"
+      - name: Test coverage
+        run: |
+            Rscript -e 'install.packages('covr')'
+            Rscript -e 'covr::codecov(token = "${{secrets.CODECOV_TOKEN}}")'

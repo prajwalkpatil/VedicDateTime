@@ -57,7 +57,7 @@ devtools::install_github("prajwalkpatil/VedicDateTime")
 To build from source, clone the repository from Github
 
 ```r
-devtools::build(args = c('--compact-vignettes=gs+qpdf'))
+devtools::build(args = c('--compact-vignettes=both'))
 devtools::install()
 ```
 ## R CMD CHECK
@@ -66,16 +66,16 @@ To check for CRAN submission
 
 ### `rhub`
 ```r
-rhub::check_for_cran(check_args = c('--compact-vignettes=gs+qpdf'))
+rhub::check_for_cran(check_args = c('--compact-vignettes=both'))
 ```
 ### Local - `R CMD CHECK`
 ```r
-devtools::check(build_args = c('--compact-vignettes=gs+qpdf'))
+devtools::check(build_args = c('--compact-vignettes=both'))
 ```
 
 ### Submit to CRAN
 ```r
-devtools::release(args = c('--compact-vignettes=gs+qpdf'))
+devtools::release(args = c('--compact-vignettes=both'))
 ```
 
 
@@ -85,6 +85,13 @@ To run the test cases for development
 
 ```r
 devtools::test()
+```
+## Test Coverage
+
+To generate the test coverage report cases for development
+
+```r
+covr::package_coverage("VedicDateTime")
 ```
 
 ## CRAN
