@@ -14,11 +14,11 @@ jobs:
         
       - name: Checkout code
         uses: actions/checkout@v3
-
+        
       - name: Setup R
         uses: r-lib/actions/setup-r@4e1feaf90520ec1215d1882fdddfe3411c08e492
+        
       - name: Install dependencies
-        env:
         run: Rscript -e "install.packages(c('remotes', 'rcmdcheck'))" -e "remotes::install_deps(dependencies = TRUE)"
       - name: Test coverage
         run: |
