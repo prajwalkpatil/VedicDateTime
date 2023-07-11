@@ -1,0 +1,12 @@
+# Generate codecov report
+name: codecov-report
+on: [workflow_dispatch]
+jobs:
+  codecov:
+    name: Run codecov report
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test coverage
+        run: |
+          Rscript -e 'remotes::install_github("r-lib/covr@gh-actions")'
+          Rscript -e 'covr::codecov(token = "${{secrets.CODECOV_TOKEN}}")'
