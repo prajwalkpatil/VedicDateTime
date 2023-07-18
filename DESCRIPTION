@@ -1,7 +1,7 @@
 Package: VedicDateTime
 Type: Package
 Title: Vedic Calendar System
-Version: 0.1.6
+Version: 0.1.7
 Authors@R: c(
     person("Neeraj Dhanraj", "Bokde", , "neerajdhanraj@gmail.com", role = c("aut", "cre", "cph")),
     person("Prajwal Kailasnath", "Patil", , "prajwalpatilcodes@gmail.com", role = "aut"),
