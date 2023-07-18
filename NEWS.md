@@ -1,6 +1,11 @@
+# v0.1.6
+
+* CRAN Re-submission
+
+
 # v0.1.5
 
-* Added support for [`swephR>=0.3.1`](https://cran.r-project.org/web/packages/swephR/index.html). Additinal [#11 Github Issue](https://github.com/prajwalkpatil/VedicDateTime/issues/11)
+* Added support for [`swephR>=0.3.1`](https://cran.r-project.org/web/packages/swephR/index.html). Additional [#11 Github Issue](https://github.com/prajwalkpatil/VedicDateTime/issues/11)
 * Updated test-cases
 * Added support for older R release.
 
