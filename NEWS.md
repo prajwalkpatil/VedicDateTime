@@ -1,3 +1,7 @@
+# v0.1.8
+
+* CRAN Submission with citation
+
 # v0.1.7
 
 * CRAN Re-submission with fixed links

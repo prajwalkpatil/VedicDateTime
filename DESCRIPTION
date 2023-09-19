@@ -1,7 +1,7 @@
 Package: VedicDateTime
 Type: Package
 Title: Vedic Calendar System
-Version: 0.1.7
+Version: 0.1.8
 Authors@R: c(
     person("Neeraj Dhanraj", "Bokde", , "neerajdhanraj@gmail.com", role = c("aut", "cre", "cph")),
     person("Prajwal Kailasnath", "Patil", , "prajwalpatilcodes@gmail.com", role = "aut"),
@@ -14,6 +14,7 @@ Description: Provides platform for Vedic calendar system having several
     time series analysis domain. The background is described in Neeraj Dhanraj Bokde et al. (2021) <doi:10.48550/arXiv.2111.03441>.
 URL: https://www.neerajbokde.in/viggnette/2022-09-05-VedicDateTime
 BugReports: https://github.com/prajwalkpatil/VedicDateTime/issues
+Citation: Bokde, N.D., Patil, P.K., Sengupta, S. et al. VedicDateTime: An R package to implement Vedic calendar system. Multimed Tools Appl (2023). https://doi.org/10.1007/s11042-023-16553-w
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
