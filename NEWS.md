@@ -1,3 +1,7 @@
+# v0.1.9
+
+* CRAN Re-submission with corrections
+
 # v0.1.8
 
 * CRAN Submission with citation

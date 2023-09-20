@@ -1,0 +1,21 @@
+bibentry(
+  bibtype = "Article",
+  title = "VedicDateTime: An R package to implement Vedic calendar system",
+  author = c(
+    as.person("Neeraj Dhanraj Bokde"),
+    as.person("Prajwal Kailasnath Patil"),
+    as.person("Saradindu Sengupta"),
+    as.person("Manisha Sawant"),
+    as.person("Andrés E. Feijóo-Lorenzo")
+  ),
+  journal  = "Multimedia Tools and Applications",
+  year     = "2023",
+  issn     = "1573-7721",
+  doi      = "10.1007/s11042-023-16553-w",
+  url      = "https://doi.org/10.1007/s11042-023-16553-w",
+  textVersion = paste(
+  "Bokde, N.D., Patil, P.K., Sengupta, S. et al.",
+  "VedicDateTime: An R package to implement Vedic calendar system.",
+  "Multimedia Tools and Applications (2023). https://doi.org/10.1007/s11042-023-16553-w"
+  )
+)
